@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Application">
+      <UniqueIdentifier>{4243d937-0598-492f-8440-95a930469457}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{a544cbed-9a52-4663-b248-013a2d8e4104}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="World">
+      <UniqueIdentifier>{7b7cbbc6-9925-43cf-9390-4b77d400425f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="EntryPoint.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="DemoProcessor.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="TestScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="TestWorld.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DemoProcessor.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="TestScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="TestWorld.h" />
+  </ItemGroup>
+</Project>

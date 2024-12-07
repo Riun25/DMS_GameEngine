@@ -1,0 +1,451 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="pch.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonUtil.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine.h">
+      <Filter>GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Manager\InputManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Manager\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeManager.h">
+      <Filter>Manager\TimeManager</Filter>
+    </ClInclude>
+    <ClInclude Include="UIManager.h">
+      <Filter>Manager\UIManager</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Manager\SoundManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="IData.h">
+      <Filter>DataContainer</Filter>
+    </ClInclude>
+    <ClInclude Include="EventManager.h">
+      <Filter>Manager\EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseWindowsProcessor.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Event.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldManager.h">
+      <Filter>Manager\WorldManager</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderManager.h">
+      <Filter>Manager\RenderManager</Filter>
+    </ClInclude>
+    <ClInclude Include="TestPlayerData.h">
+      <Filter>DataContainer</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>Util\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="SphereCollider.h">
+      <Filter>Component\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="AIController.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="EventListener.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="Reflect.h">
+      <Filter>Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="InputDevice.h">
+      <Filter>Manager\InputManager</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyInfo.h">
+      <Filter>Manager\InputManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Reflection.h">
+      <Filter>Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Object\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>Object\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Object\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsManager.h">
+      <Filter>Manager\PhysicsManager</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionCallback.h">
+      <Filter>Manager\PhysicsManager\CallBack</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshRenderer.h">
+      <Filter>Component\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Rigidbody.h">
+      <Filter>Component\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryRenderer.h">
+      <Filter>Component\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsDefine.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsDefine.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Serialize.hpp">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="MetaData.hpp">
+      <Filter>Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="CapsuleCollider.h">
+      <Filter>Component\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="DearsGameEngineAPI.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Base\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraComponent.h">
+      <Filter>Component\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationManager.h">
+      <Filter>Manager\AnimationManager</Filter>
+    </ClInclude>
+    <ClInclude Include="IManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>Component\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaneComponent.h">
+      <Filter>Component\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterController.h">
+      <Filter>Component\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="BoneGroupComponent.h">
+      <Filter>Component\Graphics\GrapicsComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="TargetBoneComponent.h">
+      <Filter>Component\Graphics\GrapicsComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationComponent.h">
+      <Filter>Component\Graphics\AnimationComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="LightComponent.h">
+      <Filter>Component\Graphics\GrapicsComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Component\Graphics\UIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Component\Graphics\UIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D.h">
+      <Filter>Component\Graphics\UIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Box2D.h">
+      <Filter>Component\Graphics\UIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeBox2D.h">
+      <Filter>Component\Graphics\UIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>Component\Graphics\UIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager.h">
+      <Filter>Manager\EntityManager</Filter>
+    </ClInclude>
+    <ClInclude Include="RaycastQueryFilterCallback.h">
+      <Filter>Manager\PhysicsManager\filter</Filter>
+    </ClInclude>
+    <ClInclude Include="Name.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="FileManager.h">
+      <Filter>Manager\FileManager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameInfo.h">
+      <Filter>GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageBox2D.h">
+      <Filter>Component\Graphics\UIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="TextIdxEnum.h">
+      <Filter>Component\Graphics\UIComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="OutlineComponent.h">
+      <Filter>Component\Graphics\GrapicsComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture3D.h">
+      <Filter>Component\Graphics\GrapicsComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponComponent.h">
+      <Filter>Component\Graphics\GrapicsComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="EquipmentComponent.h">
+      <Filter>Component\Graphics\GrapicsComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeMapComponent.h">
+      <Filter>Component\Graphics\GrapicsComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="AlphaBlendComponent.h">
+      <Filter>Component\Graphics\GrapicsComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleComponent.h">
+      <Filter>Component\Graphics\GrapicsComponent</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="JsonUtil.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine.cpp">
+      <Filter>GameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Manager\InputManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Manager\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeManager.cpp">
+      <Filter>Manager\TimeManager</Filter>
+    </ClCompile>
+    <ClCompile Include="UIManager.cpp">
+      <Filter>Manager\UIManager</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Manager\SoundManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="TestPlayerData.cpp">
+      <Filter>DataContainer</Filter>
+    </ClCompile>
+    <ClCompile Include="EventManager.cpp">
+      <Filter>Manager\EventManager</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseWindowsProcessor.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Event.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.h">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldManager.cpp">
+      <Filter>Manager\WorldManager</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderManager.cpp">
+      <Filter>Manager\RenderManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Logger.cpp">
+      <Filter>Util\Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="BoxCollider.h">
+      <Filter>Component\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="EventListener.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
+    <ClCompile Include="SampleEventListener.cpp">
+      <Filter>SampleCode</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Object\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Object\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Object\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsManager.cpp">
+      <Filter>Manager\PhysicsManager</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionCallback.cpp">
+      <Filter>Manager\PhysicsManager\CallBack</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationManager.cpp">
+      <Filter>Manager\AnimationManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraComponent.cpp">
+      <Filter>Component\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="HealthBarComponenet.h">
+      <Filter>Component\Graphics\UIComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>Manager\EntityManager</Filter>
+    </ClCompile>
+    <ClCompile Include="RaycastQueryFilterCallback.cpp">
+      <Filter>Manager\PhysicsManager\filter</Filter>
+    </ClCompile>
+    <ClCompile Include="FileManager.cpp">
+      <Filter>Manager\FileManager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameInfo.cpp">
+      <Filter>GameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageBox3D.h">
+      <Filter>Component\Graphics\UIComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="EquipmentComponent.cpp">
+      <Filter>Component\Graphics\GrapicsComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowTextureComponent.h">
+      <Filter>Component</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header">
+      <UniqueIdentifier>{f228e218-e321-4c5c-8b89-4123f9a182f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager">
+      <UniqueIdentifier>{2996045e-cfd7-457a-b9ee-38238a2440e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\InputManager">
+      <UniqueIdentifier>{a99f721f-f21a-41bd-9e02-06983589b2bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\ResourceManager">
+      <UniqueIdentifier>{00cb239b-ddba-4a6c-8be9-4cd5bf59201f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\TimeManager">
+      <UniqueIdentifier>{4251d127-13da-4633-a0d3-cb20fd6d06f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\UIManager">
+      <UniqueIdentifier>{056175bf-5579-43a7-8365-145e87b74c2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\SoundManager">
+      <UniqueIdentifier>{dd68c4a5-9c59-4ade-97a2-e8ba3ee68693}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\EventManager">
+      <UniqueIdentifier>{d1686ab4-ebdd-4c2c-b0ef-ab6cf11e2b73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{4bb3b2a9-f2b6-4db1-889f-b2d52d52f4e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{98265b73-c3fa-4500-a229-0969d3314023}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util">
+      <UniqueIdentifier>{6c2bbc97-86f4-406d-9061-0ba320f07a39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DataContainer">
+      <UniqueIdentifier>{30119850-d031-49f5-a00b-2750663ed2f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\WorldManager">
+      <UniqueIdentifier>{f70e5624-c6f1-43e1-9043-36a09e1959e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Event">
+      <UniqueIdentifier>{88e6eebf-e7e2-49da-840d-3969ae9a41df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util\Logger">
+      <UniqueIdentifier>{8522ef54-70f1-428a-b950-d8b3f35b3453}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SampleCode">
+      <UniqueIdentifier>{46d45e98-c567-4715-99e0-fa01e5a34613}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reflection">
+      <UniqueIdentifier>{81d7d29e-c3b5-4df9-a073-6943089ebe5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base">
+      <UniqueIdentifier>{ea4dc108-76dc-49d7-9c9f-101225ec6192}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\World">
+      <UniqueIdentifier>{c2f40e0a-12d8-4cb9-9bd8-49a8e13b30b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Scene">
+      <UniqueIdentifier>{9ca59931-785d-474a-ad6d-95beb530ea6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Graphics">
+      <UniqueIdentifier>{8e4d449c-361b-4a9c-85c7-363f38c93424}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Physics">
+      <UniqueIdentifier>{d7b95471-81ea-49d9-8df3-1b01afe31534}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Entity">
+      <UniqueIdentifier>{fd712042-f493-4bc4-afea-58e4b5ad78cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base\Resource">
+      <UniqueIdentifier>{826e6aad-4ef5-4c98-af69-ffb55be4c297}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine">
+      <UniqueIdentifier>{59506d66-9579-452b-b3c5-04f82f8f91f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\PhysicsManager">
+      <UniqueIdentifier>{5aca5f21-d24b-411b-8db5-62b2a6761ccc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\PhysicsManager\CallBack">
+      <UniqueIdentifier>{508da7d1-219d-4704-94c4-266ec53b0fc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\RenderManager">
+      <UniqueIdentifier>{7fd8f956-2501-4d50-aebb-aec86a8a8b8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\AnimationManager">
+      <UniqueIdentifier>{77121dba-ee3e-4082-9499-5b9256ce9365}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Unused">
+      <UniqueIdentifier>{e0b9feb9-9a0b-4d4d-b7a6-424947f4ccf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Graphics\AnimationComponent">
+      <UniqueIdentifier>{8f27b3b8-601c-427a-a209-d62002254046}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Graphics\GrapicsComponent">
+      <UniqueIdentifier>{7a38cba3-e454-47fd-8310-ff177bdcb154}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Graphics\UIComponent">
+      <UniqueIdentifier>{9a252fe1-1525-461e-9cf9-2e9b059e23f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\EntityManager">
+      <UniqueIdentifier>{dc278809-2304-4155-a8a2-afb6973906f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\PhysicsManager\filter">
+      <UniqueIdentifier>{b0576a21-a3b8-4aa9-be0b-0df913a2024e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\FileManager">
+      <UniqueIdentifier>{348dd1cf-4f7a-4474-8913-5f3b1f3a94e0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico">
+      <Filter>Base\Resource</Filter>
+    </Image>
+    <Image Include="domaBBam.ico">
+      <Filter>Base\Resource</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DearsGameEngine.rc">
+      <Filter>Base\Resource</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

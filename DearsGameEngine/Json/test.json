@@ -1,0 +1,44 @@
+{
+    "world": {
+        "scenes": [
+            {
+                "name": "Scene1",
+                "entities": [
+                    {
+                        "name": "Player",
+                        "components": [
+                            {
+                                "type": "Transform",
+                                "position": [0, 0, 0],
+                                "rotation": [0, 0, 0, 1],
+                                "scale": [1, 1, 1]
+                            },
+                            {
+                                "type": "BoxCollider",
+                                "isTrigger": true,
+                                "center": [0, 0, 0],
+                                "size": [1, 1, 1]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Scene2",
+                "entities": [
+                    {
+                        "name": "Enemy",
+                        "components": [
+                            {
+                                "type": "Transform",
+                                "position": [10, 0, 0],
+                                "rotation": [0, 0, 0, 1],
+                                "scale": [1, 1, 1]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
