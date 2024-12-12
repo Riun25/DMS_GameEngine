@@ -2,8 +2,8 @@
 #include "Name.h"
 
 Entity::Entity(entt::registry& _registry)
-	:m_registry(_registry)
-	, m_entity(m_registry.create())
+	:mRegistry(_registry)
+	, mEntity(mRegistry.create())
 {
 }
 
@@ -16,8 +16,8 @@ Entity::~Entity()
 bool Entity::Initialize(const std::string& _name)
 {
 	auto sharedThis = shared_from_this();
-	m_registry.emplace<Name>(m_entity, sharedThis, _name);
-	auto uid = std::to_string(static_cast<int>(m_entity));
+	mRegistry.emplace<Name>(mEntity, sharedThis, _name);
+	auto uid = std::to_string(static_cast<int>(mEntity));
 
 	DLOG(LOG_INFO, "Create Entity: " + _name + '(' + uid + ')');
 	return true;
@@ -25,44 +25,44 @@ bool Entity::Initialize(const std::string& _name)
 
 void Entity::Destroy()
 {
-	auto& name = m_registry.get<Name>(m_entity).m_name;
-	auto uid = std::to_string(static_cast<int>(m_entity));
+	auto& name = mRegistry.get<Name>(mEntity).mName;
+	auto uid = std::to_string(static_cast<int>(mEntity));
 	DLOG(LOG_INFO, "Remove Entity: " + name + '(' + uid + ')');
-	m_registry.destroy(m_entity);
+	mRegistry.destroy(mEntity);
 }
 
 std::shared_ptr<Entity> Entity::Clone() const
 {
-	auto entity = m_registry.create();
-	for (auto [id, storage] : m_registry.storage())
+	auto entity = mRegistry.create();
+	for (auto [id, storage] : mRegistry.storage())
 	{
-		if (storage.contains(m_entity))
+		if (storage.contains(mEntity))
 		{
-			storage.push(entity, storage.value(m_entity));
+			storage.push(entity, storage.value(mEntity));
 		}
 	}
 
-	std::shared_ptr<Entity> clone = std::make_shared<Entity>(m_registry);
+	std::shared_ptr<Entity> clone = std::make_shared<Entity>(mRegistry);
 	clone->Initialize(GetName());
-	clone->m_owner = m_owner;
+	clone->mpOwner = mpOwner;
 	return clone;
 }
 
 std::shared_ptr<Scene> Entity::GetOwner() const
 {
-	return m_owner.lock();
+	return mpOwner.lock();
 }
 
 UID Entity::GetUID() const
 {
-	return static_cast<UID>(m_entity);
+	return static_cast<UID>(mEntity);
 }
 
 std::string Entity::GetName() const
 {
-	if (m_registry.all_of<Name>(m_entity))
+	if (mRegistry.all_of<Name>(mEntity))
 	{
-		return m_registry.get<Name>(m_entity).m_name;
+		return mRegistry.get<Name>(mEntity).mName;
 	}
 	else
 	{

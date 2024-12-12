@@ -455,7 +455,7 @@ private:
 
 
 SoundSystem::SoundSystem()
-	:m_pImpl(std::make_unique<Impl>())
+	:mpImpl(std::make_unique<Impl>())
 {
 }
 
@@ -463,100 +463,100 @@ SoundSystem::~SoundSystem() = default;
 
 bool SoundSystem::Initialize()
 {
-	return m_pImpl->Initialize();
+	return mpImpl->Initialize();
 }
 
 void SoundSystem::Update()
 {
-	m_pImpl->Update();
+	mpImpl->Update();
 }
 
 void SoundSystem::Finalize()
 {
-	m_pImpl->Finalize();
+	mpImpl->Finalize();
 }
 
 bool SoundSystem::LoadBGM(const std::string& _filename, const std::string& _soundName)
 {
-	return m_pImpl->LoadBGM(_filename, _soundName);
+	return mpImpl->LoadBGM(_filename, _soundName);
 }
 
 void SoundSystem::PlayBGM(const std::string& _soundName)
 {
-	m_pImpl->PlayBGM(_soundName);
+	mpImpl->PlayBGM(_soundName);
 }
 
 void SoundSystem::PauseBGM()
 {
-	m_pImpl->PauseBGM();
+	mpImpl->PauseBGM();
 }
 
 void SoundSystem::StopBGM()
 {
-	m_pImpl->StopBGM();
+	mpImpl->StopBGM();
 }
 
 void SoundSystem::FadeInBGM(const std::string& _soundName, float _fadeTime)
 {
-	m_pImpl->FadeInBGM(_soundName, _fadeTime);
+	mpImpl->FadeInBGM(_soundName, _fadeTime);
 }
 
 void SoundSystem::FadeOutBGM(float _fadeTime)
 {
-	m_pImpl->FadeOutBGM(_fadeTime);
+	mpImpl->FadeOutBGM(_fadeTime);
 }
 
 bool SoundSystem::LoadSFX(const std::string& _filename, const std::string& _soundName, bool _loop)
 {
-	return m_pImpl->LoadSFX(_filename, _soundName, _loop);
+	return mpImpl->LoadSFX(_filename, _soundName, _loop);
 }
 
 bool SoundSystem::Load3DSound(const std::string& _filename, const std::string& _soundName, bool _loop)
 {
-	return m_pImpl->Load3DSound(_filename, _soundName, _loop);
+	return mpImpl->Load3DSound(_filename, _soundName, _loop);
 }
 
 void SoundSystem::PlaySFX(const std::string& _soundName)
 {
-	m_pImpl->PlaySFX(_soundName);
+	mpImpl->PlaySFX(_soundName);
 }
 
 void SoundSystem::StopSFX(const std::string& _soundName)
 {
-	m_pImpl->StopSFX(_soundName);
+	mpImpl->StopSFX(_soundName);
 }
 
 void SoundSystem::Play3DSound(const std::string& _soundName, float _x, float _y, float _z)
 {
-	m_pImpl->Play3DSound(_soundName, FMOD_VECTOR(_x, _y, _z));
+	mpImpl->Play3DSound(_soundName, FMOD_VECTOR(_x, _y, _z));
 }
 
 void SoundSystem::SetListenerPosition(float _x, float _y, float _z)
 {
-	m_pImpl->SetListenerPosition(FMOD_VECTOR(_x, _y, _z));
+	mpImpl->SetListenerPosition(FMOD_VECTOR(_x, _y, _z));
 }
 
 void SoundSystem::SetBGMVolume(float _volume)
 {
-	m_pImpl->SetBGMVolume(_volume);
+	mpImpl->SetBGMVolume(_volume);
 }
 
 void SoundSystem::SetSFXVolume(float _volume)
 {
-	m_pImpl->SetSFXVolume(_volume);
+	mpImpl->SetSFXVolume(_volume);
 }
 
 void SoundSystem::SetMasterVolume(float _volume)
 {
-	m_pImpl->SetMasterVolume(_volume);
+	mpImpl->SetMasterVolume(_volume);
 }
 
 bool SoundSystem::IsPlaying(const std::string& _soundName)
 {
-	return m_pImpl->IsPlaying(_soundName);
+	return mpImpl->IsPlaying(_soundName);
 }
 
 std::string SoundSystem::GetFMODVersion()
 {
-	return m_pImpl->GetFMODVersion();
+	return mpImpl->GetFMODVersion();
 }

@@ -1,54 +1,54 @@
 #include "WorldManager.h"
 
 WorldManager::WorldManager(entt::registry& _registry)
-	: m_registry(_registry)
-	, m_pCurrentWorld(nullptr)
+	: mRegistry(_registry)
+	, mpCurrentWorld(nullptr)
 {
 
 }
 
 bool WorldManager::Initialize()
 {
-	m_pCurrentWorld = nullptr;
+	mpCurrentWorld = nullptr;
 	return true;
 }
 
 void WorldManager::FixedUpdate(float _dTime)
 {
-	if (m_pCurrentWorld)
+	if (mpCurrentWorld)
 	{
-		m_pCurrentWorld->FixedUpdate(_dTime);
+		mpCurrentWorld->FixedUpdate(_dTime);
 	}
 }
 
 void WorldManager::Update(float _dTime)
 {
-	if (m_pCurrentWorld)
+	if (mpCurrentWorld)
 	{
-		m_pCurrentWorld->Update(_dTime);
+		mpCurrentWorld->Update(_dTime);
 	}
 }
 
 void WorldManager::LateUpdate(float _dTime)
 {
-	if (m_pCurrentWorld)
+	if (mpCurrentWorld)
 	{
-		m_pCurrentWorld->LateUpdate(_dTime);
+		mpCurrentWorld->LateUpdate(_dTime);
 	}
 }
 
 void WorldManager::Finalize()
 {
-	if (m_pCurrentWorld)
+	if (mpCurrentWorld)
 	{
-		m_pCurrentWorld->Finalize();
+		mpCurrentWorld->Finalize();
 	}
 }
 
 /*
 std::shared_ptr<World> WorldManager::CreateWorld()
 {
-	auto world = std::make_shared<World>(m_registry);
+	auto world = std::make_shared<World>(mRegistry);
 	m_pWorld[world->GetUID()] = world;
 	m_pCurrentWorld = world;
 	return world;
@@ -57,10 +57,10 @@ std::shared_ptr<World> WorldManager::CreateWorld()
 
 std::shared_ptr<World> WorldManager::AddWorld(std::shared_ptr<World> _world)
 {
-	m_pWorld[_world->GetUID()] = _world;
-	if (!m_pCurrentWorld)
+	mpWorld[_world->GetUID()] = _world;
+	if (!mpCurrentWorld)
 	{
-		m_pCurrentWorld = _world;
+		mpCurrentWorld = _world;
 	}
 
 	return _world;
@@ -68,30 +68,30 @@ std::shared_ptr<World> WorldManager::AddWorld(std::shared_ptr<World> _world)
 
 std::shared_ptr<World> WorldManager::GetCurrentWorld()
 {
-	if (!m_pCurrentWorld)
+	if (!mpCurrentWorld)
 	{
 		return nullptr;
 	}
-	return m_pCurrentWorld;
+	return mpCurrentWorld;
 }
 
 bool WorldManager::ShouldQuit() const
 {
-	return m_shouldQuit;
+	return mShouldQuit;
 }
 
 void WorldManager::RequestQuit()
 {
-	m_shouldQuit = true;
+	mShouldQuit = true;
 }
 
 std::shared_ptr<IData> WorldManager::GetWorldData(const std::string& _name)
 {
-	return m_pCurrentWorld->GetWorldData(_name);
+	return mpCurrentWorld->GetWorldData(_name);
 }
 
 IData* WorldManager::GetSceneData()
 {
-	return m_pCurrentWorld->GetCurrentScene()->GetSceneData();
+	return mpCurrentWorld->GetCurrentScene()->GetSceneData();
 }
 

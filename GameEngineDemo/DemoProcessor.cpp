@@ -6,7 +6,7 @@
 
 DemoProcessor::DemoProcessor(HINSTANCE _hInstance, const WCHAR* _szTitle, int _iconResourceId)
 	:BaseWindowsProcessor(_hInstance, _szTitle, _iconResourceId)
-	, m_pGameEngine(nullptr)
+	, mpGameEngine(nullptr)
 {
 }
 
@@ -17,33 +17,33 @@ bool DemoProcessor::Initialize()
 		return false;
 	}
 
-	m_pGameEngine = new GameEngine(m_hWnd, m_screenWidth, m_screenHeight);
-	m_pGameEngine->Initialize();
+	mpGameEngine = new GameEngine(mHWnd, mScreenWidth, mScreenHeight);
+	mpGameEngine->Initialize();
 
 	// Create World Test
-	m_pWorld = std::make_shared<TestWorld>(m_pGameEngine->m_registry,m_pGameEngine->GetEventManager(), m_pGameEngine->GetInputManager());
-	m_pGameEngine->GetWorldManager()->AddWorld(m_pWorld);
+	mpWorld = std::make_shared<TestWorld>(mpGameEngine->mRegistry,mpGameEngine->GetEventManager(), mpGameEngine->GetInputManager());
+	mpGameEngine->GetWorldManager()->AddWorld(mpWorld);
 
-	m_pScene1 = std::make_shared<TestScene>(m_pGameEngine->m_registry, "TestScene"
-		, m_pGameEngine->GetEventManager(), m_pGameEngine->GetRenderManager()
-		, m_pGameEngine->GetPhysicsManager(), m_pGameEngine->GetInputManager()
-		, m_pGameEngine->GetWorldManager(), m_pGameEngine->GetUIManager()
-		, m_pGameEngine->GetEntityManager(), m_pGameEngine->GetResourceManager()
-	,m_pGameEngine->GetSoundManager());
+	mpScene1 = std::make_shared<TestScene>(mpGameEngine->mRegistry, "TestScene"
+		, mpGameEngine->GetEventManager(), mpGameEngine->GetRenderManager()
+		, mpGameEngine->GetPhysicsManager(), mpGameEngine->GetInputManager()
+		, mpGameEngine->GetWorldManager(), mpGameEngine->GetUIManager()
+		, mpGameEngine->GetEntityManager(), mpGameEngine->GetResourceManager()
+	,mpGameEngine->GetSoundManager());
 
-	m_pScene2 = std::make_shared<TestScene>(m_pGameEngine->m_registry, "TestScene"
-		, m_pGameEngine->GetEventManager(), m_pGameEngine->GetRenderManager()
-		, m_pGameEngine->GetPhysicsManager(), m_pGameEngine->GetInputManager()
-		, m_pGameEngine->GetWorldManager(), m_pGameEngine->GetUIManager()
-		, m_pGameEngine->GetEntityManager(), m_pGameEngine->GetResourceManager()
-		, m_pGameEngine->GetSoundManager());
+	mpScene2 = std::make_shared<TestScene>(mpGameEngine->mRegistry, "TestScene"
+		, mpGameEngine->GetEventManager(), mpGameEngine->GetRenderManager()
+		, mpGameEngine->GetPhysicsManager(), mpGameEngine->GetInputManager()
+		, mpGameEngine->GetWorldManager(), mpGameEngine->GetUIManager()
+		, mpGameEngine->GetEntityManager(), mpGameEngine->GetResourceManager()
+		, mpGameEngine->GetSoundManager());
 
-	m_pGameEngine->GetWorldManager()->GetCurrentWorld()->AddScene(m_pScene1);
-	m_pGameEngine->GetWorldManager()->GetCurrentWorld()->AddScene(m_pScene2);
+	mpGameEngine->GetWorldManager()->GetCurrentWorld()->AddScene(mpScene1);
+	mpGameEngine->GetWorldManager()->GetCurrentWorld()->AddScene(mpScene2);
 
-	m_pGameEngine->GetSoundManager()->LoadBGM("../../Resources/Sound/Snd_bgm_Battle.wav", "Snd_bgm_Battle");
-	m_pGameEngine->GetSoundManager()->PlayBGM("Snd_bgm_Battle");
-	m_pGameEngine->GetWorldManager()->GetCurrentWorld()->SetScene(m_pScene1->GetUID());
+	mpGameEngine->GetSoundManager()->LoadBGM("../../Resources/Sound/Snd_bgm_Battle.wav", "Snd_bgm_Battle");
+	mpGameEngine->GetSoundManager()->PlayBGM("Snd_bgm_Battle");
+	mpGameEngine->GetWorldManager()->GetCurrentWorld()->SetScene(mpScene1->GetUID());
 	return true;
 }
 
@@ -51,22 +51,22 @@ void DemoProcessor::Run()
 {
 	while (true)
 	{
-		if (PeekMessage(&m_msg, NULL, 0, 0, PM_REMOVE))
+		if (PeekMessage(&mMsg, NULL, 0, 0, PM_REMOVE))
 		{
-			if (m_msg.message == WM_QUIT)
+			if (mMsg.message == WM_QUIT)
 			{
 				break;
 			}
 
-			if (!TranslateAccelerator(m_msg.hwnd, m_hAccelTable, &m_msg))
+			if (!TranslateAccelerator(mMsg.hwnd, mHAccelTable, &mMsg))
 			{
-				TranslateMessage(&m_msg);
-				DispatchMessage(&m_msg);
+				TranslateMessage(&mMsg);
+				DispatchMessage(&mMsg);
 			}
 		}
 		else
 		{
-			if (m_pGameEngine->GetWorldManager()->ShouldQuit())
+			if (mpGameEngine->GetWorldManager()->ShouldQuit())
 			{
 				Finalize();
 				PostQuitMessage(0);
@@ -80,7 +80,7 @@ void DemoProcessor::Run()
 void DemoProcessor::Finalize()
 {
 	__super::Finalize();
-	m_pGameEngine->Finalize();
+	mpGameEngine->Finalize();
 }
 
 LRESULT CALLBACK DemoProcessor::WndProc(HWND _hWnd, UINT _message, WPARAM _wParam, LPARAM _lParam)
@@ -91,5 +91,5 @@ LRESULT CALLBACK DemoProcessor::WndProc(HWND _hWnd, UINT _message, WPARAM _wPara
 void DemoProcessor::Update()
 {
 	__super::Update();
-	m_pGameEngine->Run();
+	mpGameEngine->Run();
 }

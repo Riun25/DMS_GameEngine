@@ -11,13 +11,13 @@ public:
 
 	void* CreateObject()
 	{
-		lastEntityID++;
+		mLastEntityID++;
 		void* entity = new World();
 	}
 
 private:
-	std::vector<World*> entities;
+	std::vector<World*> mEentities;
 	
-	uint64_t lastEntityID = 0;
+	uint64_t mLastEntityID = 0;
 };
 

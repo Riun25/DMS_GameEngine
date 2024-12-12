@@ -26,10 +26,10 @@ public:
 
 
 private:
-    GameEngine* m_pGameEngine;
+    GameEngine* mpGameEngine;
 
-    std::shared_ptr<World> m_pWorld;
-    std::shared_ptr<Scene> m_pScene1;
-	std::shared_ptr<Scene> m_pScene2;
+    std::shared_ptr<World> mpWorld;
+    std::shared_ptr<Scene> mpScene1;
+	std::shared_ptr<Scene> mpScene2;
 
 };

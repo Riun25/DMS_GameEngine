@@ -2,7 +2,7 @@
 
 EquipmentComponent::~EquipmentComponent()
 {
-	m_pEquipments.clear();
+	mpEquipments.clear();
 }
 
 
@@ -12,13 +12,13 @@ void EquipmentComponent::AddEquipment(const std::string& _fileName /*= ""*/
 	, const std::string& _normal /*= ""*/)
 {
 	std::shared_ptr<Equipment> equipment = std::make_shared<Equipment>();
-	equipment->m_pModelBuffer = std::make_shared<ModelBuffer>();
-	equipment->m_modelFileName = _fileName;
-	equipment->m_meshName = _meshName;
-	equipment->m_targetModelName = _targetName;
-	equipment->m_boneName = _boneName;
-	equipment->m_diffuseTexture = _diffuse;
-	equipment->m_normalTexture = _normal;
+	equipment->mpModelBuffer = std::make_shared<ModelBuffer>();
+	equipment->mModelFileName = _fileName;
+	equipment->mMeshName = _meshName;
+	equipment->mTargetModelName = _targetName;
+	equipment->mBoneName = _boneName;
+	equipment->mDiffuseTexture = _diffuse;
+	equipment->mNormalTexture = _normal;
 
-	m_pEquipments.push_back(equipment);
+	mpEquipments.push_back(equipment);
 }

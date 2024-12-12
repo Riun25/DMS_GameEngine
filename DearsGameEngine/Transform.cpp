@@ -3,15 +3,15 @@
 
 Matrix Transform::GetTransformMatrix()
 {
-	if (m_pParent)
+	if (mpParent)
 	{
-		return  m_pParent->GetTransformMatrix();
+		return  mpParent->GetTransformMatrix();
 	}
-	Quaternion qut = Quaternion::CreateFromYawPitchRoll(m_localRotation);
+	Quaternion qut = Quaternion::CreateFromYawPitchRoll(mLocalRotation);
 
-	Matrix matrix = (Matrix::CreateScale(m_localScale)
+	Matrix matrix = (Matrix::CreateScale(mLocalScale)
 		* Matrix::CreateFromQuaternion(qut)
-		* Matrix::CreateTranslation(m_localPosition)).Transpose();
+		* Matrix::CreateTranslation(mLocalPosition)).Transpose();
 
 
 	return matrix;

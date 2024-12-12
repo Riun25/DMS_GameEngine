@@ -20,9 +20,9 @@ public:
 	void Update()
 	{
 		// 즉각적인 이벤트 트리거
-		m_pEventManager->TriggerEvent(Event("TestImmediateEventHandler"));
+		mpEventManager->TriggerEvent(Event("TestImmediateEventHandler"));
 		// 지연된 이벤트를 이벤트 큐에 푸쉬
-		m_pEventManager->PushDelayedEvent(Event("TestImmediateEventHandler"), 1);
+		mpEventManager->PushDelayedEvent(Event("TestImmediateEventHandler"), 1);
 	}
 
 	// 즉각적으로 처리할 이벤트 핸들러 함수입니다.

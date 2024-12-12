@@ -16,7 +16,7 @@ bool InputManager::Initialize()
 // 업데이트 함수입니다. 관리중인 디바이스들을 업데이트합니다.
 void InputManager::Update(float _dTime)
 {
-	for (auto& device : m_pDevices)
+	for (auto& device : mpDevices)
 	{
 		device->Update();
 	}
@@ -55,7 +55,7 @@ void InputManager::Finalize()
 KEY_STATE InputManager::GetKeyState(KEY _key)
 {
 	KEY_STATE keyState;
-	for (const auto& device : m_pDevices)
+	for (const auto& device : mpDevices)
 	{
 		auto info = device->GetKeyInfo(_key);
 		keyState = info.keyState;
@@ -81,7 +81,7 @@ bool InputManager::GetKeyUp(KEY _key)
 // 마우스의 위치를 반환합니다.
 Vector2 InputManager::GetMousePos() const
 {
-	for (const auto& device : m_pDevices)
+	for (const auto& device : mpDevices)
 	{
 		// 관리중인 디바이스에 마우스가 있을 경우
 		if (auto mouse = std::dynamic_pointer_cast<Mouse>(device))
@@ -96,7 +96,7 @@ Vector2 InputManager::GetMousePos() const
 // 이전 프레임과 현재 프레임의 마우스의 위치 차이를 반환합니다.
 Vector2 InputManager::GetDeltaMousePos() const
 {
-	for (const auto& device : m_pDevices)
+	for (const auto& device : mpDevices)
 	{
 		// 관리중인 디바이스에 마우스가 있을 경우
 		if (auto mouse = std::dynamic_pointer_cast<Mouse>(device))
@@ -112,20 +112,20 @@ void InputManager::AddMouseCursor(const std::string& _file)
 {
 	std::wstring wFile = std::wstring(_file.begin(), _file.end());
 	HCURSOR cursor = (HCURSOR)LoadImage(NULL, wFile.c_str(), IMAGE_CURSOR, 32, 32, LR_LOADFROMFILE);
-	m_cursors.push_back(cursor);
+	mCursors.push_back(cursor);
 }
 
 void InputManager::SetMouseCursor(int _cursorName)
 {
-	m_currentCursor = m_cursors[_cursorName];
+	mCurrentCursor = mCursors[_cursorName];
 }
 
 void InputManager::SetMouseCursor()
 {
-	SetCursor(m_currentCursor);
+	SetCursor(mCurrentCursor);
 }
 
 HCURSOR InputManager::GetCurrentCursor() const
 {
-	return m_currentCursor;
+	return mCurrentCursor;
 }

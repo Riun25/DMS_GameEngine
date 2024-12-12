@@ -3,7 +3,7 @@
 
 TestWorld::TestWorld(entt::registry& _registry, EventManager* _pEventManager, InputManager* _pInputManager)
 	: World(_registry, _pEventManager)
-	, m_pInputManager(_pInputManager)
+	, mpInputManager(_pInputManager)
 {
 
 }
@@ -16,7 +16,7 @@ bool TestWorld::Initialize()
 
 void TestWorld::Update(float _dTime)
 {
-	if (m_pInputManager->GetKeyState(KEY::D1) == KEY_STATE::TAP)
+	if (mpInputManager->GetKeyState(KEY::D1) == KEY_STATE::TAP)
 	{
 		// 		if (GetCurrentScene()->GetUID() == 0)
 		// 		{

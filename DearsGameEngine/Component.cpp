@@ -4,5 +4,5 @@
 
 std::string Component::GetOwnerName() const
 {
-	return m_pOwner->GetName();
+	return mpOwner->GetName();
 }

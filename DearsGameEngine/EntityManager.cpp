@@ -50,14 +50,14 @@ void EntityManager::RemoveEntity(const UID& _uid)
 
 		if (pEntity->HasComponent<Transform>())
 		{
-			pEntity->GetComponent<Transform>().m_pParent = nullptr;
-			pEntity->GetComponent<Transform>().m_pOwner = nullptr;
+			pEntity->GetComponent<Transform>().mpParent = nullptr;
+			pEntity->GetComponent<Transform>().mpOwner = nullptr;
 		}
 
 		// Rigidbody가 있으면 PhysX 객체 해제
 		if (pEntity->HasComponent<Rigidbody>())
 		{
-			pEntity->GetComponent<Rigidbody>().m_pRigidActor->release();
+			pEntity->GetComponent<Rigidbody>().mpRigidActor->release();
 		}
 
 		pEntity->Destroy();

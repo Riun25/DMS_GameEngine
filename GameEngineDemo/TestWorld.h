@@ -15,6 +15,6 @@ public:
 
 
 private:
-	InputManager* m_pInputManager;
+	InputManager* mpInputManager;
 };
 

@@ -5,15 +5,15 @@
 #include "PhysicsManager.h"
 
 // World::World(entt::registry& _registry)
-// 	: m_registry(_registry)
+// 	: mRegistry(_registry)
 // 	, m_uid(UIDGenerator::GenerateUID<World>())
 // 	, EventListener(nullptr)
 // {
 // }
 
 World::World(entt::registry& _registry, EventManager* _pEventManager)
-	: m_registry(_registry)
-	, m_uid(UIDGenerator::GenerateUID<World>())
+	: mRegistry(_registry)
+	, mUid(UIDGenerator::GenerateUID<World>())
 	, EventListener(_pEventManager)
 {
 
@@ -21,23 +21,23 @@ World::World(entt::registry& _registry, EventManager* _pEventManager)
 
 bool World::Initialize()
 {
-	m_previousScene = 0;
+	mPreviousScene = 0;
 	return true;
 }
 
 void World::FixedUpdate(float _dTime)
 {
-	m_pCurrentScene->FixedUpdate(_dTime);
+	mpCurrentScene->FixedUpdate(_dTime);
 }
 
 void World::Update(float _dTime)
 {
-	m_pCurrentScene->Update(_dTime);
+	mpCurrentScene->Update(_dTime);
 }
 
 void World::LateUpdate(float _dTime)
 {
-	m_pCurrentScene->LateUpdate(_dTime);
+	mpCurrentScene->LateUpdate(_dTime);
 }
 
 void World::Finalize()
@@ -47,16 +47,16 @@ void World::Finalize()
 // 	{
 // 		scene->Finalize();
 // 	}
-	m_pCurrentScene->Finalize();
+	mpCurrentScene->Finalize();
 
 }
 
 std::shared_ptr<Scene> World::AddScene(std::shared_ptr<Scene> _pScene)
 {
-	m_pScenes[_pScene->GetUID()] = _pScene;
-	if (!m_pCurrentScene)
+	mpScenes[_pScene->GetUID()] = _pScene;
+	if (!mpCurrentScene)
 	{
-		m_pCurrentScene = _pScene;
+		mpCurrentScene = _pScene;
 	}
 
 	return _pScene;
@@ -66,7 +66,7 @@ std::shared_ptr<Scene> World::AddScene(std::shared_ptr<Scene> _pScene)
 /*
 std::shared_ptr<Scene> World::CreateScene(const std::string& _name)
 {
-	auto scene = std::make_shared<Scene>(m_registry, _name);
+	auto scene = std::make_shared<Scene>(mRegistry, _name);
 	m_pScenes[scene->GetUID()] = scene;
 	return scene;
 }
@@ -74,23 +74,23 @@ std::shared_ptr<Scene> World::CreateScene(const std::string& _name)
 
 void World::RemoveScene(std::shared_ptr<Scene> _pScene)
 {
-	m_pScenes.erase(_pScene->GetUID());
+	mpScenes.erase(_pScene->GetUID());
 }
 
 void World::SetScene(const UID& _uid)
 {
-	auto it = m_pScenes.find(_uid);
-	if (it != m_pScenes.end())
+	auto it = mpScenes.find(_uid);
+	if (it != mpScenes.end())
 	{
-		if (m_pCurrentScene)
+		if (mpCurrentScene)
 		{
-			m_previousScene = m_pCurrentScene->GetUID();
-			m_pCurrentScene->Finalize();
+			mPreviousScene = mpCurrentScene->GetUID();
+			mpCurrentScene->Finalize();
 		}
 
-		m_pCurrentScene = it->second;
-		DLOG(LOG_INFO, "Scene Change: " + m_pCurrentScene->GetName() + '(' + std::to_string(_uid) + ')');
-		m_pCurrentScene->Initialize();
+		mpCurrentScene = it->second;
+		DLOG(LOG_INFO, "Scene Change: " + mpCurrentScene->GetName() + '(' + std::to_string(_uid) + ')');
+		mpCurrentScene->Initialize();
 	}
 	else
 	{
@@ -100,23 +100,23 @@ void World::SetScene(const UID& _uid)
 
 void World::SetScene(const std::string& _name)
 {
-	auto it = std::find_if(m_pScenes.begin(), m_pScenes.end(),
+	auto it = std::find_if(mpScenes.begin(), mpScenes.end(),
 		[&_name](const std::pair<UID, std::shared_ptr<Scene>>& pair)
 		{
 			return pair.second->GetName() == _name;
 		});
 
-	if (it != m_pScenes.end())
+	if (it != mpScenes.end())
 	{
-		if (m_pCurrentScene)
+		if (mpCurrentScene)
 		{
-			m_previousScene = m_pCurrentScene->GetUID();
-			m_pCurrentScene->Finalize();
+			mPreviousScene = mpCurrentScene->GetUID();
+			mpCurrentScene->Finalize();
 		}
 
-		m_pCurrentScene = it->second;
-		DLOG(LOG_INFO, "Scene Change: " + _name + '(' + std::to_string(m_pCurrentScene->GetUID()) + ')');
-		m_pCurrentScene->Initialize();
+		mpCurrentScene = it->second;
+		DLOG(LOG_INFO, "Scene Change: " + _name + '(' + std::to_string(mpCurrentScene->GetUID()) + ')');
+		mpCurrentScene->Initialize();
 	}
 	else
 	{
@@ -126,30 +126,30 @@ void World::SetScene(const std::string& _name)
 
 std::unordered_map<UID, std::shared_ptr<Scene>> World::GetSceneMap() const
 {
-	return m_pScenes;
+	return mpScenes;
 }
 
 std::shared_ptr<Scene> World::GetCurrentScene()
 {
-	if (!m_pCurrentScene)
+	if (!mpCurrentScene)
 	{
 		return nullptr;
 	}
-	return m_pCurrentScene;
+	return mpCurrentScene;
 }
 
 UID World::GetPreviousScene()
 {
-	return m_previousScene;
+	return mPreviousScene;
 }
 
 UID World::GetUID() const
 {
-	return m_uid;
+	return mUid;
 }
 
 std::shared_ptr<IData> World::GetWorldData(const std::string& _name)
 {
-	return m_pWorldData[_name];
+	return mpWorldData[_name];
 }
 

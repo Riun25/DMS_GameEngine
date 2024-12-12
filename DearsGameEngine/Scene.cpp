@@ -15,18 +15,18 @@ Scene::Scene(entt::registry& _registry, const std::string& _name
 	, WorldManager* _pWorldManager, UIManager* _pUIManager
 	, EntityManager* _pEntityManager, ResourceManager* _pResourceManager
 	, SoundManager* _pSoundManager)
-	: m_registry(_registry)
-	, m_sceneName(_name)
-	, m_uid(UIDGenerator::GenerateUID<Scene>())
+	: mRegistry(_registry)
+	, mSceneName(_name)
+	, mUid(UIDGenerator::GenerateUID<Scene>())
 	, EventListener(_pEventManager)
-	, m_pRenderManager(_pRenderManager)
-	, m_pPhysicsManager(_pPhysicsManager)
-	, m_pInputManager(_pInpueManager)
-	, m_pWorldManager(_pWorldManager)
-	, m_pUIManager(_pUIManager)
-	, m_pEntityManager(_pEntityManager)
-	, m_pResourceManager(_pResourceManager)
-	, m_pSoundManager(_pSoundManager)
+	, mpRenderManager(_pRenderManager)
+	, mpPhysicsManager(_pPhysicsManager)
+	, mpInputManager(_pInpueManager)
+	, mpWorldManager(_pWorldManager)
+	, mpUIManager(_pUIManager)
+	, mpEntityManager(_pEntityManager)
+	, mpResourceManager(_pResourceManager)
+	, mpSoundManager(_pSoundManager)
 {
 	DLOG(LOG_INFO, "Create Scene: " + _name);
 }
@@ -34,14 +34,14 @@ Scene::Scene(entt::registry& _registry, const std::string& _name
 Scene::Scene(entt::registry& _registry, const std::string& _name
 	, EventManager* _pEventManager, RenderManager* _pRenderManager
 	, InputManager* _pInpueManager, WorldManager* _pWorldManager)
-	: m_registry(_registry)
-	, m_sceneName(_name)
-	, m_uid(UIDGenerator::GenerateUID<Scene>())
+	: mRegistry(_registry)
+	, mSceneName(_name)
+	, mUid(UIDGenerator::GenerateUID<Scene>())
 	, EventListener(_pEventManager)
-	, m_pRenderManager(_pRenderManager)
-	, m_pPhysicsManager(nullptr)
-	, m_pInputManager(_pInpueManager)
-	, m_pWorldManager(_pWorldManager)
+	, mpRenderManager(_pRenderManager)
+	, mpPhysicsManager(nullptr)
+	, mpInputManager(_pInpueManager)
+	, mpWorldManager(_pWorldManager)
 {
 	DLOG(LOG_INFO, "Create Scene: " + _name);
 }
@@ -60,7 +60,7 @@ Scene::Scene(entt::registry& _registry, const std::string& _name
 
 bool Scene::Initialize()
 {
-	return m_pRenderManager->InitializeScene();
+	return mpRenderManager->InitializeScene();
 }
 
 void Scene::FixedUpdate(float _dTime)
@@ -77,9 +77,9 @@ void Scene::LateUpdate(float _dTime)
 
 void Scene::Finalize()
 {
-	m_pEntityManager->RemoveAllEntities();
+	mpEntityManager->RemoveAllEntities();
 
-	m_pPhysicsManager->ClearScene();
+	mpPhysicsManager->ClearScene();
 }
 
 //void Scene::RemoveEntity(const UID& _uid)
@@ -131,16 +131,16 @@ void Scene::AddSystem(const std::shared_ptr<System>& _pSystem)
 
 UID Scene::GetUID() const
 {
-	return m_uid;
+	return mUid;
 }
 
 std::string Scene::GetName() const
 {
-	return m_sceneName;
+	return mSceneName;
 }
 
 IData* Scene::GetSceneData() const
 {
-	return m_pSceneData;
+	return mpSceneData;
 }
 

@@ -152,7 +152,7 @@ public:
 
 private:
 	class Impl;
-	std::unique_ptr<Impl> m_pImpl;	// 사운드 시스템 캡슐화를 위한 Impl 객체
+	std::unique_ptr<Impl> mpImpl;	// 사운드 시스템 캡슐화를 위한 Impl 객체
 };
 
 extern "C"

@@ -15,18 +15,18 @@
 class DearsGraphicsEngine;
 
 GameEngine::GameEngine(HWND _hWnd, int _width, int _height)
-	: m_hWnd(_hWnd), m_width(_width), m_height(_height), m_registry()
-	, m_pTimeManager(nullptr)
-	, m_pInputManager(nullptr)
-	, m_pResourceManager(nullptr)
-	, m_pSoundManager(nullptr)
-	, m_pEventManager(nullptr)
-	, m_pWorldManager(nullptr)
-	, m_pPhysicsManager(nullptr)
-	, m_pRenderManager(nullptr)
-	, m_pUIManager(nullptr)
-	, m_pEntityManager(nullptr)
-	, m_pInfo(nullptr)
+	: mHWnd(_hWnd), mWidth(_width), mHeight(_height), mRegistry()
+	, mpTimeManager(nullptr)
+	, mpInputManager(nullptr)
+	, mpResourceManager(nullptr)
+	, mpSoundManager(nullptr)
+	, mpEventManager(nullptr)
+	, mpWorldManager(nullptr)
+	, mpPhysicsManager(nullptr)
+	, mpRenderManager(nullptr)
+	, mpUIManager(nullptr)
+	, mpEntityManager(nullptr)
+	, mpInfo(nullptr)
 {
 }
 
@@ -37,35 +37,35 @@ bool GameEngine::Initialize()
 	PrintLoggerInfo();
 
 	/// 그래픽스 엔진 생성
-	m_pGraphicsEngine = std::make_shared<DearsGraphicsEngine>(m_hWnd, m_width, m_height);
+	mpGraphicsEngine = std::make_shared<DearsGraphicsEngine>(mHWnd, mWidth, mHeight);
 
 
 	/// 매니저 클래스 생성 및 초기화
-	m_pTimeManager = new TimeManager();
-	m_pInfo = new GameInfo(m_pTimeManager);
-	m_pInputManager = new InputManager();
-	m_pSoundManager = new SoundManager(/*m_pEventManager*/);
-	m_pResourceManager = new ResourceManager(m_pGraphicsEngine,m_pSoundManager);
-	m_pEventManager = new EventManager();
-	m_pWorldManager = new WorldManager(m_registry);
-	m_pPhysicsManager = new PhysicsManager(m_registry, this);
-	m_pRenderManager = new RenderManager(m_registry, m_pGraphicsEngine, m_pWorldManager, m_pTimeManager);
-	m_pUIManager = new UIManager(m_registry, m_pInputManager, m_pGraphicsEngine, m_pInfo);
-	m_pEntityManager = new EntityManager(m_registry);
+	mpTimeManager = new TimeManager();
+	mpInfo = new GameInfo(mpTimeManager);
+	mpInputManager = new InputManager();
+	mpSoundManager = new SoundManager(/*mpEventManager*/);
+	mpResourceManager = new ResourceManager(mpGraphicsEngine,mpSoundManager);
+	mpEventManager = new EventManager();
+	mpWorldManager = new WorldManager(mRegistry);
+	mpPhysicsManager = new PhysicsManager(mRegistry, this);
+	mpRenderManager = new RenderManager(mRegistry, mpGraphicsEngine, mpWorldManager, mpTimeManager);
+	mpUIManager = new UIManager(mRegistry, mpInputManager, mpGraphicsEngine, mpInfo);
+	mpEntityManager = new EntityManager(mRegistry);
 
 
 	/// 그래픽스 엔진 초기화
-	m_pGraphicsEngine->Initialize();
+	mpGraphicsEngine->Initialize();
 
-	if (!m_pTimeManager->Initialize()
-		|| !m_pInputManager->Initialize()
-		|| !m_pResourceManager->Initialize()
-		|| !m_pEventManager->Initialize()
-		|| !m_pWorldManager->Initialize()
-		|| !m_pPhysicsManager->Initialize()
-		|| !m_pRenderManager->Initialize()
-		|| !m_pSoundManager->Initialize()
-		|| !m_pUIManager->Initialize())
+	if (!mpTimeManager->Initialize()
+		|| !mpInputManager->Initialize()
+		|| !mpResourceManager->Initialize()
+		|| !mpEventManager->Initialize()
+		|| !mpWorldManager->Initialize()
+		|| !mpPhysicsManager->Initialize()
+		|| !mpRenderManager->Initialize()
+		|| !mpSoundManager->Initialize()
+		|| !mpUIManager->Initialize())
 	{
 		return false;
 	}
@@ -75,139 +75,139 @@ bool GameEngine::Initialize()
 
 void GameEngine::Run()
 {	
-	m_pTimeManager->Update();
+	mpTimeManager->Update();
 
-	m_fixedDeltaTime = m_pTimeManager->FixedDeltaTime();
+	mFixedDeltaTime = mpTimeManager->FixedDeltaTime();
 
-	m_deltaTime = m_pTimeManager->DeltaTime();
-	m_accumulator += m_deltaTime;
+	mDeltaTime = mpTimeManager->DeltaTime();
+	mAccumulator += mDeltaTime;
 
-	while (m_accumulator >= m_fixedDeltaTime)
+	while (mAccumulator >= mFixedDeltaTime)
 	{
-		FixedUpdate(m_fixedDeltaTime);
-		m_accumulator -= m_fixedDeltaTime; // 누적값에서 고정된 프레임 시간만큼 뺌
+		FixedUpdate(mFixedDeltaTime);
+		mAccumulator -= mFixedDeltaTime; // 누적값에서 고정된 프레임 시간만큼 뺌
 	}
-	Update(m_deltaTime);
-	LateUpdate(m_deltaTime);
+	Update(mDeltaTime);
+	LateUpdate(mDeltaTime);
 	BeginRender();
-	Render(m_deltaTime);
+	Render(mDeltaTime);
 	EndRender();
 }
 
 void GameEngine::FixedUpdate(float _fixedDeltaTime)
 {
-	m_pPhysicsManager->FixedUpdate(_fixedDeltaTime);
-	m_pWorldManager->FixedUpdate(_fixedDeltaTime);
+	mpPhysicsManager->FixedUpdate(_fixedDeltaTime);
+	mpWorldManager->FixedUpdate(_fixedDeltaTime);
 }
 
 // 매니저들을 업데이트합니다.
 void GameEngine::Update(float _dTime)
 {
-	m_pInputManager->Update(_dTime);
-	m_pEventManager->Update(_dTime);
-	m_pSoundManager->Update(_dTime);
-	m_pPhysicsManager->Update(_dTime);
-	m_pWorldManager->Update(_dTime);
-	m_pUIManager->Update(_dTime);
-	m_pRenderManager->Update(_dTime);
+	mpInputManager->Update(_dTime);
+	mpEventManager->Update(_dTime);
+	mpSoundManager->Update(_dTime);
+	mpPhysicsManager->Update(_dTime);
+	mpWorldManager->Update(_dTime);
+	mpUIManager->Update(_dTime);
+	mpRenderManager->Update(_dTime);
 }
 
 void GameEngine::Render(float _dTime)
 {
-	m_pUIManager->Render(_dTime);
-	m_pRenderManager->Render(_dTime);
+	mpUIManager->Render(_dTime);
+	mpRenderManager->Render(_dTime);
 }
 
 void GameEngine::LateUpdate(float _dTime)
 {
-	m_pEventManager->LateUpdate(_dTime);
-	m_pRenderManager->LateUpdate(_dTime);
-	m_pWorldManager->LateUpdate(_dTime);
+	mpEventManager->LateUpdate(_dTime);
+	mpRenderManager->LateUpdate(_dTime);
+	mpWorldManager->LateUpdate(_dTime);
 }
 
 // 관리하고 있는 매니저들의 메모리할당을 해제합니다.
 void GameEngine::Finalize()
 {
-	m_pEventManager->Finalize();
-	m_pSoundManager->Finalize();
-	m_pInputManager->Finalize();
-	m_pTimeManager->Finalize();
-	m_pUIManager->Finalize();
-	m_pWorldManager->Finalize();
-	m_pResourceManager->Finalize();
+	mpEventManager->Finalize();
+	mpSoundManager->Finalize();
+	mpInputManager->Finalize();
+	mpTimeManager->Finalize();
+	mpUIManager->Finalize();
+	mpWorldManager->Finalize();
+	mpResourceManager->Finalize();
 
-	delete m_pTimeManager;
-	delete m_pInputManager;
-	delete m_pResourceManager;
-	delete m_pEventManager;
-	delete m_pWorldManager;
-	delete m_pPhysicsManager;
-	delete m_pRenderManager;
-	delete m_pUIManager;
-	delete m_pSoundManager;
-	delete m_pEntityManager;
+	delete mpTimeManager;
+	delete mpInputManager;
+	delete mpResourceManager;
+	delete mpEventManager;
+	delete mpWorldManager;
+	delete mpPhysicsManager;
+	delete mpRenderManager;
+	delete mpUIManager;
+	delete mpSoundManager;
+	delete mpEntityManager;
 
-	delete m_pInfo;
+	delete mpInfo;
 
 	CleanupLogger();
 }
 
 void GameEngine::BeginRender()
 {
-	m_pRenderManager->BeginRender();
+	mpRenderManager->BeginRender();
 }
 
 void GameEngine::EndRender()
 {
-	m_pRenderManager->EndRender();
+	mpRenderManager->EndRender();
 }
 
 PhysicsManager* GameEngine::GetPhysicsManager() const
 {
-	return m_pPhysicsManager;
+	return mpPhysicsManager;
 }
 
 RenderManager* GameEngine::GetRenderManager() const
 {
-	return m_pRenderManager;
+	return mpRenderManager;
 }
 
 UIManager* GameEngine::GetUIManager() const
 {
-	return m_pUIManager;
+	return mpUIManager;
 }
 
 EntityManager* GameEngine::GetEntityManager() const
 {
-	return m_pEntityManager;
+	return mpEntityManager;
 }
 
 TimeManager* GameEngine::GetTimeManager() const
 {
-	return m_pTimeManager;
+	return mpTimeManager;
 }
 
 InputManager* GameEngine::GetInputManager() const
 {
-	return m_pInputManager;
+	return mpInputManager;
 }
 
 ResourceManager* GameEngine::GetResourceManager() const
 {
-	return m_pResourceManager;
+	return mpResourceManager;
 }
 
 SoundManager* GameEngine::GetSoundManager() const
 {
-	return m_pSoundManager;
+	return mpSoundManager;
 }
 
 EventManager* GameEngine::GetEventManager() const
 {
-	return m_pEventManager;
+	return mpEventManager;
 }
 
 WorldManager* GameEngine::GetWorldManager() const
 {
-	return m_pWorldManager;
+	return mpWorldManager;
 }

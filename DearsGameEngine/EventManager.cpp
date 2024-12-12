@@ -3,23 +3,23 @@
 
 bool EventManager::Initialize()
 {
-	m_currentFrame = 0;
+	mCurrentFrame = 0;
 	return true;
 }
 
 void EventManager::Update(float _dTime)
 {
-	m_currentFrame++;
+	mCurrentFrame++;
 
 	// 즉각적인 이벤트 처리
 	ProcessImmediateEvents();
 
 	// 지연된 이벤트 처리
 // 	std::lock_guard<std::mutex> lock(m_eventMutex);
-	while (!m_delayedEventQueue.empty() && m_delayedEventQueue.top().m_executeFrame <= m_currentFrame)
+	while (!mDelayedEventQueue.empty() && mDelayedEventQueue.top().mExecuteFrame <= mCurrentFrame)
 	{
-		auto delayedEvent = m_delayedEventQueue.top().m_event;
-		m_delayedEventQueue.pop();
+		auto delayedEvent = mDelayedEventQueue.top().mEvent;
+		mDelayedEventQueue.pop();
 		TriggerDelayedEvent(*delayedEvent);
 	}
 }
@@ -46,7 +46,7 @@ void EventManager::Finalize()
 HandlerID EventManager::RegisterImmediateEvent(const std::string& _name, EventHandler _handler)
 {
 	HandlerID newId = ++m_lastHandlerId;
-	m_immediateHandlers[_name][newId] = std::move(_handler);
+	mImmediateHandlers[_name][newId] = std::move(_handler);
 	return newId;
 }
 
@@ -54,7 +54,7 @@ HandlerID EventManager::RegisterImmediateEvent(const std::string& _name, EventHa
 HandlerID EventManager::RegisterDelayedEvent(const std::string& _name, EventHandler _handler)
 {
 	HandlerID newId = ++m_lastHandlerId;
-	m_delayedHandlers[_name][newId] = std::move(_handler);
+	mDelayedHandlers[_name][newId] = std::move(_handler);
 	return newId;
 }
 
@@ -62,21 +62,21 @@ HandlerID EventManager::RegisterDelayedEvent(const std::string& _name, EventHand
 void EventManager::UnregisterEvent(const std::string& _name, HandlerID _handlerId)
 {
 	// 즉각적인 핸들러에서 제거
-	if (auto it = m_immediateHandlers.find(_name); it != m_immediateHandlers.end())
+	if (auto it = mImmediateHandlers.find(_name); it != mImmediateHandlers.end())
 	{
 		it->second.erase(_handlerId);
 		if (it->second.empty())
 		{
-			m_immediateHandlers.erase(it);
+			mImmediateHandlers.erase(it);
 		}
 	}
 	// 지연된 핸들러에서 제거
-	if (auto it = m_delayedHandlers.find(_name); it != m_delayedHandlers.end())
+	if (auto it = mDelayedHandlers.find(_name); it != mDelayedHandlers.end())
 	{
 		it->second.erase(_handlerId);
 		if (it->second.empty())
 		{
-			m_delayedHandlers.erase(it);
+			mDelayedHandlers.erase(it);
 		}
 	}
 }
@@ -85,19 +85,19 @@ void EventManager::UnregisterEvent(const std::string& _name, HandlerID _handlerI
 void EventManager::TriggerEvent(const Event& _event)
 {
 // 	std::lock_guard<std::mutex> lock(m_eventMutex);
-	m_immediateEventQueue.push(std::make_shared<Event>(_event));
+	mImmediateEventQueue.push(std::make_shared<Event>(_event));
 }
 
 // 즉각적인 이벤트 처리 함수입니다
 void EventManager::ProcessImmediateEvents()
 {
 // 	std::lock_guard<std::mutex> lock(m_eventMutex);
-	while (!m_immediateEventQueue.empty())
+	while (!mImmediateEventQueue.empty())
 	{
-		auto event = std::move(m_immediateEventQueue.front());
-		m_immediateEventQueue.pop();
+		auto event = std::move(mImmediateEventQueue.front());
+		mImmediateEventQueue.pop();
 
-		if (auto it = m_immediateHandlers.find(event->m_name); it != m_immediateHandlers.end())
+		if (auto it = mImmediateHandlers.find(event->mName); it != mImmediateHandlers.end())
 		{
 			for (auto& [id, handler] : it->second)
 			{
@@ -118,14 +118,14 @@ void EventManager::ProcessImmediateEvents()
 void EventManager::PushDelayedEvent(const Event& _event, int _delayFrames)
 {
 // 	std::lock_guard<std::mutex> lock(m_eventMutex);
-	int executeFrame = m_currentFrame + _delayFrames;
-	m_delayedEventQueue.push(DelayedEvent{ std::make_unique<Event>(_event), executeFrame });
+	int executeFrame = mCurrentFrame + _delayFrames;
+	mDelayedEventQueue.push(DelayedEvent{ std::make_unique<Event>(_event), executeFrame });
 }
 
 //  지연된 이벤트 트리거 함수입니다.
 void EventManager::TriggerDelayedEvent(const Event& _event)
 {
-	if (auto it = m_delayedHandlers.find(_event.m_name); it != m_delayedHandlers.end())
+	if (auto it = mDelayedHandlers.find(_event.mName); it != mDelayedHandlers.end())
 	{
 		for (auto& [id, handler] : it->second)
 		{
@@ -143,11 +143,11 @@ void EventManager::TriggerDelayedEvent(const Event& _event)
 }
 
 EventManager::DelayedEvent::DelayedEvent(std::shared_ptr<Event> e, int frame)
-	: m_event(std::move(e)), m_executeFrame(frame)
+	: mEvent(std::move(e)), mExecuteFrame(frame)
 {
 }
 
 bool EventManager::DelayedEvent::operator<(const DelayedEvent& _other) const
 {
-	return m_executeFrame > _other.m_executeFrame;
+	return mExecuteFrame > _other.mExecuteFrame;
 }

@@ -4,23 +4,23 @@
 #include "GameEngine.h"
 
 BaseWindowsProcessor::BaseWindowsProcessor(HINSTANCE _hInstance, const WCHAR* _szTitle = L"BaseApp", int _iconResourceId = IDI_ICONDMB)
-	:m_hInstance(_hInstance)
-	, m_hWnd()
-	, m_msg()
-	, m_hAccelTable()
-	, m_iconResourceId(_iconResourceId)
+	:mHInstance(_hInstance)
+	, mHWnd()
+	, mMsg()
+	, mHAccelTable()
+	, mIconResourceId(_iconResourceId)
 {
-	wcscpy_s(m_szTitle, _szTitle);
+	wcscpy_s(mSzTitle, _szTitle);
 }
 
 BaseWindowsProcessor::BaseWindowsProcessor(int _hInstance, const WCHAR* _szTitle = L"BaseApp", int _iconResourceId = IDI_ICONDMB)
-	:m_hInstance(reinterpret_cast<HINSTANCE>(_hInstance))
-	, m_hWnd()
-	, m_msg()
-	, m_hAccelTable()
-	, m_iconResourceId(_iconResourceId)
+	:mHInstance(reinterpret_cast<HINSTANCE>(_hInstance))
+	, mHWnd()
+	, mMsg()
+	, mHAccelTable()
+	, mIconResourceId(_iconResourceId)
 {
-	wcscpy_s(m_szTitle, _szTitle);
+	wcscpy_s(mSzTitle, _szTitle);
 }
 
 bool BaseWindowsProcessor::Initialize()
@@ -37,35 +37,35 @@ bool BaseWindowsProcessor::Initialize()
 	wcex.lpfnWndProc = BaseWindowsProcessor::WndProc;
 	wcex.cbClsExtra = 0;
 	wcex.cbWndExtra = 0;
-	wcex.hInstance = m_hInstance;
-	wcex.hIcon = LoadIcon(m_hInstance, MAKEINTRESOURCE(m_iconResourceId));
+	wcex.hInstance = mHInstance;
+	wcex.hIcon = LoadIcon(mHInstance, MAKEINTRESOURCE(mIconResourceId));
 	wcex.hCursor = NULL/*hCousor*//*LoadCursor(nullptr, IDC_ARROW)*/;
 	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 	wcex.lpszMenuName = 0;
-	wcex.lpszClassName = m_szTitle;
-	wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(m_iconResourceId));
+	wcex.lpszClassName = mSzTitle;
+	wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(mIconResourceId));
 
 	RegisterClassExW(&wcex);
 	// 원하는 스타일로 설정 (제목 표시줄, 테두리, 스크롤바 제거)
 	DWORD dwStyle = WS_POPUP;
 
-	RECT rect = { 0, 0, m_screenWidth, m_screenHeight };
+	RECT rect = { 0, 0, mScreenWidth, mScreenHeight };
 	AdjustWindowRect(&rect, dwStyle, FALSE);
 	int windowWidth = rect.right - rect.left;
 	int windowHeight = rect.bottom - rect.top;
 
-	m_hWnd = CreateWindowW(m_szTitle, m_szTitle, dwStyle,
-		m_screenPosX, m_screenPosY, windowWidth, windowHeight, nullptr, nullptr, m_hInstance, nullptr);
+	mHWnd = CreateWindowW(mSzTitle, mSzTitle, dwStyle,
+		mScreenPosX, mScreenPosY, windowWidth, windowHeight, nullptr, nullptr, mHInstance, nullptr);
 
-	if (!m_hWnd)
+	if (!mHWnd)
 	{
 		return false;
 	}
 
-	ShowWindow(m_hWnd, SW_SHOWNORMAL);
-	UpdateWindow(m_hWnd);
+	ShowWindow(mHWnd, SW_SHOWNORMAL);
+	UpdateWindow(mHWnd);
 
-	m_hAccelTable = LoadAccelerators(m_hInstance, MAKEINTRESOURCE(IDI_ICONDMB));
+	mHAccelTable = LoadAccelerators(mHInstance, MAKEINTRESOURCE(IDI_ICONDMB));
 
 	/// 시스템 생성 및 초기화
 	// 디버그 모드에서 콘솔창 생성
@@ -78,25 +78,25 @@ bool BaseWindowsProcessor::Initialize()
 
 void BaseWindowsProcessor::OnResize(uint16_t _width, uint16_t _height)
 {
-	m_screenWidth = _width;
-	m_screenHeight = _height;
+	mScreenWidth = _width;
+	mScreenHeight = _height;
 }
 
 void BaseWindowsProcessor::Run()
 {
 	while (true)
 	{
-		if (PeekMessage(&m_msg, NULL, 0, 0, PM_REMOVE))
+		if (PeekMessage(&mMsg, NULL, 0, 0, PM_REMOVE))
 		{
-			if (m_msg.message == WM_QUIT)
+			if (mMsg.message == WM_QUIT)
 			{
 				break;
 			}
 
-			if (!TranslateAccelerator(m_msg.hwnd, m_hAccelTable, &m_msg))
+			if (!TranslateAccelerator(mMsg.hwnd, mHAccelTable, &mMsg))
 			{
-				TranslateMessage(&m_msg);
-				DispatchMessage(&m_msg);
+				TranslateMessage(&mMsg);
+				DispatchMessage(&mMsg);
 			}
 		}
 		else
@@ -112,7 +112,7 @@ void BaseWindowsProcessor::Finalize()
 
 HWND BaseWindowsProcessor::GetHWND() const
 {
-	return m_hWnd;
+	return mHWnd;
 }
 
 LRESULT CALLBACK BaseWindowsProcessor::WndProc(HWND _hWnd, UINT _message, WPARAM _wParam, LPARAM _lParam)

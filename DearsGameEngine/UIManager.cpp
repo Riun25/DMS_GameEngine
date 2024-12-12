@@ -26,11 +26,10 @@ void UIManager::Update(float _dTime)
 	for (auto entity : cameraView)
 	{
 		auto& camera = mRegistry.get<CameraComponent>(entity);
-		if (camera.m_cameraEnum == 0 && camera.m_pCamera)
+		if (camera.mCameraEnum == 0 && camera.mpCamera)
 		{
-			UpdateViewNProjection(camera.m_pCamera);
+			UpdateViewNProjection(camera.mpCamera);
 		}
-
 	}
 
 	Vector2 mousePos = mpInputManager->GetMousePos();
@@ -45,15 +44,14 @@ void UIManager::Update(float _dTime)
 
 		// 호버링이 된 상태인지 확인한다.
 		bool isHovered =
-			(mousePos.x >= texture.m_position.x) && (mousePos.x <= texture.m_position.x + texture.m_size.x) &&
-			(mousePos.y >= texture.m_position.y) && (mousePos.y <= texture.m_position.y + texture.m_size.y);
+			(mousePos.x >= texture.mPosition.x) && (mousePos.x <= texture.mPosition.x + texture.mSize.x) &&
+			(mousePos.y >= texture.mPosition.y) && (mousePos.y <= texture.mPosition.y + texture.mSize.y);
 
 		// 버튼의 상태를 체크한다.
 		CheckButtonState(&button, isHovered);
 
 		auto text = mRegistry.try_get<Text>(entity);
 		UpdateButton(&texture, &button, text);
-
 	}
 
 	/// 모델 버퍼에서 사용하는 경우에 대한 텍스처를 업데이트한다.
@@ -63,21 +61,20 @@ void UIManager::Update(float _dTime)
 		auto& texture = mRegistry.get<Texture2D>(entity);
 		auto mesh = mRegistry.try_get<MeshRenderer>(entity);
 
-		if (!(texture.m_file == "") && mesh)
+		if (!(texture.mFile == "") && mesh)
 		{
-			auto newTexture2D = mpGraphicsEngine->Get_Textures(texture.m_file);
-			if (mesh->m_pModel->m_diffusetexture != newTexture2D)
+			auto newTexture2D = mpGraphicsEngine->Get_Textures(texture.mFile);
+			if (mesh->mpModel->m_diffusetexture != newTexture2D)
 			{
 				if (auto button = mRegistry.try_get<Button>(entity))
 				{
-					button->mUIPosition = texture.m_position;
-					button->mNormalUIName = texture.m_file;
+					button->mUIPosition = texture.mPosition;
+					button->mNormalUIName = texture.mFile;
 				}
-				mesh->m_pModel->m_diffusetexture = newTexture2D;
+				mesh->mpModel->m_diffusetexture = newTexture2D;
 			}
 		}
 	}
-
 }
 
 void UIManager::LateUpdate(float _dTime)
@@ -86,7 +83,7 @@ void UIManager::LateUpdate(float _dTime)
 
 void UIManager::Render(float _dTime)
 {
-	for (int i = maxNumLayer; i >= 0; i--)
+	for (int i = mMaxNumLayer; i >= 0; i--)
 	{
 		/// 타일은 가장 안쪽에 그린다.
 		RenderTile(i);
@@ -97,7 +94,7 @@ void UIManager::Render(float _dTime)
 		/// 체력바를 그림
 		RenderHealthBar(i);
 
-		/// 직사각형을 이때 그리겠습니다.
+		/// 직사각형을 그림
 		RenderRectFilled(i);
 
 		/// 해당 레이어의 텍스트를 렌더링
@@ -105,8 +102,6 @@ void UIManager::Render(float _dTime)
 	}
 
 	RenderDebugInfo();
-
-
 }
 
 void UIManager::Finalize()
@@ -119,11 +114,11 @@ void UIManager::Finalize()
 		if (auto text = mRegistry.try_get<Text>(entity))
 		{
 			// 폰트는 중복이 될 수 있기 때문에 있는지 확인하고 있을 때만 지워준다.
-			/*if (mpGraphicsEngine->Get_Font(text->m_font) != nullptr)
+			/*if (mpGraphicsEngine->Get_Font(text->mFont) != nullptr)
 			{
-				mpGraphicsEngine->Erase_Textures(text->m_font);
+				mpGraphicsEngine->Erase_Textures(text->mFont);
 			}*/
-			RemoveText(text->m_pOwner);
+			RemoveText(text->mpOwner);
 		}
 	}
 
@@ -133,7 +128,7 @@ void UIManager::Finalize()
 	{
 		if (auto box2D = mRegistry.try_get<Box2D>(entity))
 		{
-			RemoveRect(box2D->m_pOwner);
+			RemoveRect(box2D->mpOwner);
 		}
 	}
 
@@ -143,7 +138,7 @@ void UIManager::Finalize()
 	{
 		if (auto HPBar = mRegistry.try_get<HealthBarComponenet>(entity))
 		{
-			RemoveHPBar(HPBar->m_pOwner);
+			RemoveHPBar(HPBar->mpOwner);
 		}
 	}
 
@@ -154,7 +149,7 @@ void UIManager::Finalize()
 		// Texture2D 컴포넌트가 있는 경우에만 실행 : 이게 있어야만 버튼이 생성되기 때문에 따로 버튼은 삭제 코드를 넣지 않았다.
 		if (auto texture = mRegistry.try_get<Texture2D>(entity))
 		{
-			RemoveUI(texture->m_pOwner);
+			RemoveUI(texture->mpOwner);
 		}
 	}
 
@@ -164,7 +159,7 @@ void UIManager::Finalize()
 	{
 		if (auto texture = mRegistry.try_get<MessageBox2D>(entity))
 		{
-			RemoveMessageBox2D(texture->m_pOwner);
+			RemoveMessageBox2D(texture->mpOwner);
 		}
 	}
 	auto view6 = mRegistry.view<MessageBox3D>();
@@ -172,7 +167,7 @@ void UIManager::Finalize()
 	{
 		if (auto texture = mRegistry.try_get<MessageBox3D>(entity))
 		{
-			RemoveMessageBox3D(texture->m_pOwner);
+			RemoveMessageBox3D(texture->mpOwner);
 		}
 	}
 }
@@ -206,41 +201,41 @@ void UIManager::AddText(std::shared_ptr<Entity> _entity, std::u8string _text, st
 {
 	_entity->AddComponent<Text>(_text, _fontName, _pos, _layer, _isVisible, _rgba); // 텍스트 컴포넌트 추가
 	auto& text = _entity->GetComponent<Text>();
-	maxNumLayer = std::max(maxNumLayer, _layer);  // 최대 레이어 번호 갱신
+	mMaxNumLayer = std::max(mMaxNumLayer, _layer);  // 최대 레이어 번호 갱신
 }
 
 void UIManager::AddTextwithInt(std::shared_ptr<Entity> _entity, std::u8string _text, std::string _fontName, Vector2 _pos, int _num, int _layer /*= 0*/, bool _isVisible /*= true*/, Vector4 _rgba /*= Vector4(0.0f, 0.0f, 0.0f, 1.0f)*/)
 {
 	AddText(_entity, _text, _fontName, _pos, _layer, _isVisible, _rgba);
 	auto& text = _entity->GetComponent<Text>();
-	text.m_idx = TEXT_IDX::INT1;
-	text.m_num1 = _num;
+	text.mIdx = TEXT_IDX::INT1;
+	text.mNum1 = _num;
 }
 
 void UIManager::AddTextwithInt2(std::shared_ptr<Entity> _entity, std::u8string _text, std::string _fontName, Vector2 _pos, int _num1, int _num2, int _layer /*= 0*/, bool _isVisible /*= true*/, Vector4 _rgba /*= Vector4(0.0f, 0.0f, 0.0f, 1.0f)*/)
 {
 	AddText(_entity, _text, _fontName, _pos, _layer, _isVisible, _rgba);
 	auto& text = _entity->GetComponent<Text>();
-	text.m_idx = TEXT_IDX::INT2;
-	text.m_num1 = _num1;
-	text.m_num2 = _num2;
+	text.mIdx = TEXT_IDX::INT2;
+	text.mNum1 = _num1;
+	text.mNum2 = _num2;
 }
 
 void UIManager::AddTextwithFloat(std::shared_ptr<Entity> _entity, std::u8string _text, std::string _fontName, Vector2 _pos, float _num, int _layer /*= 0*/, bool _isVisible /*= true*/, Vector4 _rgba /*= Vector4(0.0f, 0.0f, 0.0f, 1.0f)*/)
 {
 	AddText(_entity, _text, _fontName, _pos, _layer, _isVisible, _rgba);
 	auto& text = _entity->GetComponent<Text>();
-	text.m_idx = TEXT_IDX::FLOAT1;
-	text.m_num3 = _num;
+	text.mIdx = TEXT_IDX::FLOAT1;
+	text.mNum3 = _num;
 }
 
 void UIManager::AddTextwithFloat2(std::shared_ptr<Entity> _entity, std::u8string _text, std::string _fontName, Vector2 _pos, float _num1, float _num2, int _layer /*= 0*/, bool _isVisible /*= true*/, Vector4 _rgba /*= Vector4(0.0f, 0.0f, 0.0f, 1.0f)*/)
 {
 	AddText(_entity, _text, _fontName, _pos, _layer, _isVisible, _rgba);
 	auto& text = _entity->GetComponent<Text>();
-	text.m_idx = TEXT_IDX::FLOAT2;
-	text.m_num3 = _num1;
-	text.m_num4 = _num2;
+	text.mIdx = TEXT_IDX::FLOAT2;
+	text.mNum3 = _num1;
+	text.mNum4 = _num2;
 }
 
 void UIManager::RemoveText(std::shared_ptr<Entity> _entity)
@@ -268,7 +263,7 @@ void UIManager::AddUI(std::shared_ptr<Entity> _entity, std::string _fileName, Ve
 {
 	// Texture2D 컴포넌트를 엔티티에 추가
 	_entity->AddComponent<Texture2D>(_fileName, _pos, _size, _layer, _rgba, _isVisible);
-	maxNumLayer = std::max(maxNumLayer, _layer);  // 최대 레이어 번호 갱신
+	mMaxNumLayer = std::max(mMaxNumLayer, _layer);  // 최대 레이어 번호 갱신
 }
 
 void UIManager::RemoveUI(std::shared_ptr<Entity> _entity)
@@ -289,7 +284,7 @@ void UIManager::Erase_Textures(std::string _textureName)
 
 void UIManager::SetMaxNumLayer(int _num)
 {
-	maxNumLayer = _num;
+	mMaxNumLayer = _num;
 }
 
 void UIManager::AddButtonPressUI(std::shared_ptr<Entity> _entity, std::string _UIImange, Vector2 _pressedPosition, Vector2 _pressedSize)
@@ -303,9 +298,9 @@ void UIManager::AddButtonPressUI(std::shared_ptr<Entity> _entity, std::string _U
 			_entity->AddComponent<Button>();
 		}
 		auto& buttonComp = _entity->GetComponent<Button>();
-		buttonComp.mUIPosition = originalTexture.m_position;
-		buttonComp.mUISize = originalTexture.m_size;
-		buttonComp.mNormalUIName = originalTexture.m_file;
+		buttonComp.mUIPosition = originalTexture.mPosition;
+		buttonComp.mUISize = originalTexture.mSize;
+		buttonComp.mNormalUIName = originalTexture.mFile;
 		buttonComp.mPressedUIName = _UIImange;
 		buttonComp.mUIPressedSize = _pressedSize;
 		buttonComp.mUIPressedPosition = _pressedPosition;
@@ -329,9 +324,9 @@ void UIManager::AddButtonPressText(std::shared_ptr<Entity> _entity, std::string 
 			_entity->AddComponent<Button>();
 		}
 		auto& buttonComp = _entity->GetComponent<Button>();
-		buttonComp.mTextPosition = originalText.m_position;
-		buttonComp.mNormalTextFont = originalText.m_font;
-		buttonComp.mNormalText = originalText.m_text;
+		buttonComp.mTextPosition = originalText.mPosition;
+		buttonComp.mNormalTextFont = originalText.mFont;
+		buttonComp.mNormalText = originalText.mText;
 		buttonComp.mPressedTextFont = _font;
 		buttonComp.mPressedText = _text;
 		buttonComp.mTextPressedPosition = _pressedPosition;
@@ -349,11 +344,11 @@ void UIManager::AddButtonPressColor(std::shared_ptr<Entity> _entity, Vector4 _Pr
 			_entity->AddComponent<Button>();
 		}
 		auto& buttonComp = _entity->GetComponent<Button>();
-		buttonComp.mUIPosition = originalTexture.m_position;
-		buttonComp.mUISize = originalTexture.m_size;
-		buttonComp.mNormalRGBA = originalTexture.m_rgba;
-		buttonComp.mUIPressedPosition = originalTexture.m_position;
-		buttonComp.mUIPressedSize = originalTexture.m_size;
+		buttonComp.mUIPosition = originalTexture.mPosition;
+		buttonComp.mUISize = originalTexture.mSize;
+		buttonComp.mNormalRGBA = originalTexture.mRgba;
+		buttonComp.mUIPressedPosition = originalTexture.mPosition;
+		buttonComp.mUIPressedSize = originalTexture.mSize;
 		buttonComp.mPressedRGBA = _PressedRGBA;
 	}
 	else
@@ -374,9 +369,9 @@ void UIManager::AddButtonHoveredUI(std::shared_ptr<Entity> _entity, std::string 
 			_entity->AddComponent<Button>();
 		};
 		auto& buttonComp = _entity->GetComponent<Button>();
-		buttonComp.mUIPosition = originalTexture.m_position;
-		buttonComp.mUISize = originalTexture.m_size;
-		buttonComp.mNormalUIName = originalTexture.m_file;
+		buttonComp.mUIPosition = originalTexture.mPosition;
+		buttonComp.mUISize = originalTexture.mSize;
+		buttonComp.mNormalUIName = originalTexture.mFile;
 		buttonComp.mHoveredUIName = _UIImange;
 		buttonComp.mUIHoveringSize = _hoveringSize;
 		buttonComp.mUIHoveringPosition = _hoveringPosition;
@@ -400,9 +395,9 @@ void UIManager::AddButtonHoveredText(std::shared_ptr<Entity> _entity, std::strin
 			_entity->AddComponent<Button>();
 		}
 		auto& buttonComp = _entity->GetComponent<Button>();
-		buttonComp.mTextPosition = originalText.m_position;
-		buttonComp.mNormalTextFont = originalText.m_font;
-		buttonComp.mNormalText = originalText.m_text;
+		buttonComp.mTextPosition = originalText.mPosition;
+		buttonComp.mNormalTextFont = originalText.mFont;
+		buttonComp.mNormalText = originalText.mText;
 		buttonComp.mHoveredTextFont = _font;
 		buttonComp.mHoveredText = _text;
 		buttonComp.mTextHoveringPosition = _hoveringPosition;
@@ -420,11 +415,11 @@ void UIManager::AddButtonHoveredColor(std::shared_ptr<Entity> _entity, Vector4 _
 			_entity->AddComponent<Button>();
 		}
 		auto& buttonComp = _entity->GetComponent<Button>();
-		buttonComp.mUIPosition = originalTexture.m_position;
-		buttonComp.mUISize = originalTexture.m_size;
-		buttonComp.mNormalRGBA = originalTexture.m_rgba;
-		buttonComp.mUIHoveringSize = originalTexture.m_size;
-		buttonComp.mUIHoveringPosition = originalTexture.m_position;
+		buttonComp.mUIPosition = originalTexture.mPosition;
+		buttonComp.mUISize = originalTexture.mSize;
+		buttonComp.mNormalRGBA = originalTexture.mRgba;
+		buttonComp.mUIHoveringSize = originalTexture.mSize;
+		buttonComp.mUIHoveringPosition = originalTexture.mPosition;
 		buttonComp.mHoveredRGBA = _HoveredRGBA;
 	}
 	else
@@ -445,14 +440,14 @@ void UIManager::AddButtonAllColor(std::shared_ptr<Entity> _entity, Vector4 _Pres
 			_entity->AddComponent<Button>();
 		}
 		auto& buttonComp = _entity->GetComponent<Button>();
-		buttonComp.mUIPosition = originalTexture.m_position;
-		buttonComp.mUISize = originalTexture.m_size;
-		buttonComp.mNormalRGBA = originalTexture.m_rgba;
-		buttonComp.mUIPressedPosition = originalTexture.m_position;
-		buttonComp.mUIPressedSize = originalTexture.m_size;
+		buttonComp.mUIPosition = originalTexture.mPosition;
+		buttonComp.mUISize = originalTexture.mSize;
+		buttonComp.mNormalRGBA = originalTexture.mRgba;
+		buttonComp.mUIPressedPosition = originalTexture.mPosition;
+		buttonComp.mUIPressedSize = originalTexture.mSize;
 		buttonComp.mPressedRGBA = _PressedRGBA;
-		buttonComp.mUIHoveringSize = originalTexture.m_size;
-		buttonComp.mUIHoveringPosition = originalTexture.m_position;
+		buttonComp.mUIHoveringSize = originalTexture.mSize;
+		buttonComp.mUIHoveringPosition = originalTexture.mPosition;
 		buttonComp.mHoveredRGBA = _HoveredRGBA;
 	}
 	else
@@ -473,9 +468,9 @@ void UIManager::AddButtonAllUI(std::shared_ptr<Entity> _entity, std::string _pre
 			_entity->AddComponent<Button>();
 		}
 		auto& buttonComp = _entity->GetComponent<Button>();
-		buttonComp.mUIPosition = originalTexture.m_position;
-		buttonComp.mUISize = originalTexture.m_size;
-		buttonComp.mNormalUIName = originalTexture.m_file;
+		buttonComp.mUIPosition = originalTexture.mPosition;
+		buttonComp.mUISize = originalTexture.mSize;
+		buttonComp.mNormalUIName = originalTexture.mFile;
 		buttonComp.mPressedUIName = _pressedUIImange;
 		buttonComp.mUIPressedSize = _pressedSize;
 		buttonComp.mUIPressedPosition = _pressedPosition;
@@ -510,7 +505,7 @@ void UIManager::RemoveButton(std::shared_ptr<Entity> _entity)
 void UIManager::AddRect(std::shared_ptr<Entity> _entity, Vector2 _posXY, Vector2 _sizeWH, int _layer, Vector4 _rgba, float _thickness /*= 0.0f*/, Vector4 _BorderRgba /*= Vector4()*/)
 {
 	_entity->AddComponent<Box2D>(_posXY, _sizeWH, _layer, _rgba, _thickness, _BorderRgba, true, false);
-	maxNumLayer = std::max(maxNumLayer, _layer);  // 최대 레이어 번호 갱신
+	mMaxNumLayer = std::max(mMaxNumLayer, _layer);  // 최대 레이어 번호 갱신
 }
 
 void UIManager::RemoveRect(std::shared_ptr<Entity> _entity)
@@ -527,7 +522,7 @@ void UIManager::RemoveRect(std::shared_ptr<Entity> _entity)
 void UIManager::AddTile(std::shared_ptr<Entity> _entity, Vector2 _posXY, Vector2 _sizeWH, int _layer, Vector4 _rgba, float _thickness /*= 0.0f*/, Vector4 _BorderRgba /*= Vector4()*/)
 {
 	_entity->AddComponent<Tile>(_posXY, _sizeWH, _layer, _rgba, _thickness, _BorderRgba, true, false);
-	maxNumLayer = std::max(maxNumLayer, _layer);  // 최대 레이어 번호 갱신
+	mMaxNumLayer = std::max(mMaxNumLayer, _layer);  // 최대 레이어 번호 갱신
 }
 
 void UIManager::AddTileMap(std::shared_ptr<Entity> _entity, Vector2 _center, int _col, int _row)
@@ -546,7 +541,7 @@ void UIManager::AddTileMap(std::shared_ptr<Entity> _entity, Vector2 _center, int
 void UIManager::AddHPBar(std::shared_ptr<Entity> _entity, Vector2 _posXY, Vector2 _sizeWH, int _layer, Vector4 _backgroundRgba, Vector4 _foregroundColor, float _healthPercentage /*= 1.0f*/)
 {
 	_entity->AddComponent<HealthBarComponenet>(_posXY, Vector3(), _sizeWH, _layer, _backgroundRgba, _foregroundColor, _healthPercentage, true, false);
-	maxNumLayer = std::max(maxNumLayer, _layer);  // 최대 레이어 번호 갱신
+	mMaxNumLayer = std::max(mMaxNumLayer, _layer);  // 최대 레이어 번호 갱신
 }
 
 void UIManager::Add3DHPBar(std::shared_ptr<Entity> _entity, Vector3 _offset, Vector2 _sizeWH,
@@ -554,7 +549,7 @@ void UIManager::Add3DHPBar(std::shared_ptr<Entity> _entity, Vector3 _offset, Vec
 	float _healthPercentage /*= 1.0f*/)
 {
 	_entity->AddComponent<HealthBarComponenet>(Vector2(), _offset, _sizeWH, _layer, _backgroundRgba, _foregroundColor, _healthPercentage, true, true);
-	maxNumLayer = std::max(maxNumLayer, _layer);  // 최대 레이어 번호 갱신
+	mMaxNumLayer = std::max(mMaxNumLayer, _layer);  // 최대 레이어 번호 갱신
 }
 
 void UIManager::RemoveHPBar(std::shared_ptr<Entity> _entity)
@@ -587,7 +582,7 @@ void UIManager::AddMessageBox2D(std::shared_ptr<Entity> _entity, std::string _im
 	message2DComp.mIsImgVisible = _isVisible;
 	message2DComp.mIsTextVisible = _isVisible;
 
-	maxNumLayer = std::max(maxNumLayer, _layer);  // 최대 레이어 번호 갱신
+	mMaxNumLayer = std::max(mMaxNumLayer, _layer);  // 최대 레이어 번호 갱신
 }
 
 void UIManager::AddMessageBox3D(std::shared_ptr<Entity> _entity, std::string _imgFileName, Vector2 _imgOffset, Vector2 _size, Vector4 _imgRgba
@@ -611,7 +606,7 @@ void UIManager::AddMessageBox3D(std::shared_ptr<Entity> _entity, std::string _im
 	message3DComp.mIsImgVisible = _isVisible;
 	message3DComp.mIsTextVisible = _isVisible;
 
-	maxNumLayer = std::max(maxNumLayer, _layer);  // 최대 레이어 번호 갱신
+	mMaxNumLayer = std::max(mMaxNumLayer, _layer);  // 최대 레이어 번호 갱신
 }
 
 void UIManager::RemoveMessageBox2D(std::shared_ptr<Entity> _entity)
@@ -638,8 +633,8 @@ void UIManager::RemoveMessageBox3D(std::shared_ptr<Entity> _entity)
 
 void UIManager::SetRenderDebugInfo(bool _fps, bool _camera)
 {
-	m_rendFPS = _fps;
-	m_rendCameraInfo = _camera;
+	mRendFPS = _fps;
+	mRendCameraInfo = _camera;
 }
 
 /// UI 매니저 내에서만 사용--------------------------------------------------------------------------------------------------------
@@ -695,46 +690,46 @@ void UIManager::UpdateButton(Texture2D* _pTexture2D, Button* _pButton, Text* _pT
 		if (_pButton->mNormalUIName != "") // 노멀 텍스처가 없다면 하지 않는다.
 		{
 			// if문은 복사 방지임 : file과 위치가 현재와 같지 않다면 업데이트 해준다.
-			if (_pTexture2D->m_file != _pButton->mNormalUIName) _pTexture2D->m_file = _pButton->mNormalUIName;
-			if (_pTexture2D->m_position != _pButton->mUIPosition) _pTexture2D->m_position = _pButton->mUIPosition;
-			if (_pTexture2D->m_size != _pButton->mUISize) _pTexture2D->m_size = _pButton->mUISize;
+			if (_pTexture2D->mFile != _pButton->mNormalUIName) _pTexture2D->mFile = _pButton->mNormalUIName;
+			if (_pTexture2D->mPosition != _pButton->mUIPosition) _pTexture2D->mPosition = _pButton->mUIPosition;
+			if (_pTexture2D->mSize != _pButton->mUISize) _pTexture2D->mSize = _pButton->mUISize;
 		}
 
-		if (_pTexture2D->m_rgba != _pButton->mNormalRGBA) // 색상이 현재와 같지 않다면 업데이트 해준다.
+		if (_pTexture2D->mRgba != _pButton->mNormalRGBA) // 색상이 현재와 같지 않다면 업데이트 해준다.
 		{
-			_pTexture2D->m_rgba = _pButton->mNormalRGBA;
+			_pTexture2D->mRgba = _pButton->mNormalRGBA;
 		}
 
-		if (_pText && _pText->m_font != "" && _pText->m_text != u8""
+		if (_pText && _pText->mFont != "" && _pText->mText != u8""
 			&& _pButton->mNormalTextFont != "" && _pButton->mNormalText != u8"") // 폰트나 텍스트가 없으면 진행하지 않는다.
 		{
 			// if문은 복사 방지임 : 폰트, 텍스트, 위치가 현재와 같지 않다면 업데이트 해준다.
-			if (_pText->m_font != _pButton->mNormalTextFont) _pText->m_font = _pButton->mNormalTextFont;
-			if (_pText->m_text != _pButton->mNormalText) _pText->m_text = _pButton->mNormalText;
-			if (_pText->m_position != _pButton->mTextPosition) _pText->m_position = _pButton->mTextPosition;
+			if (_pText->mFont != _pButton->mNormalTextFont) _pText->mFont = _pButton->mNormalTextFont;
+			if (_pText->mText != _pButton->mNormalText) _pText->mText = _pButton->mNormalText;
+			if (_pText->mPosition != _pButton->mTextPosition) _pText->mPosition = _pButton->mTextPosition;
 		}
 		break;
 	case ButtonState::HOVERED:
 		if (_pButton->mHoveredUIName != "") // 호버된 텍스처가 없다면 하지 않는다.
 		{
 			// if문은 복사 방지임 : file과 위치가 현재와 같지 않다면 업데이트 해준다.
-			if (_pTexture2D->m_file != _pButton->mHoveredUIName) _pTexture2D->m_file = _pButton->mHoveredUIName;
-			if (_pTexture2D->m_position != _pButton->mUIHoveringPosition) _pTexture2D->m_position = _pButton->mUIHoveringPosition;
-			if (_pTexture2D->m_size != _pButton->mUIHoveringSize) _pTexture2D->m_size = _pButton->mUIHoveringSize;
+			if (_pTexture2D->mFile != _pButton->mHoveredUIName) _pTexture2D->mFile = _pButton->mHoveredUIName;
+			if (_pTexture2D->mPosition != _pButton->mUIHoveringPosition) _pTexture2D->mPosition = _pButton->mUIHoveringPosition;
+			if (_pTexture2D->mSize != _pButton->mUIHoveringSize) _pTexture2D->mSize = _pButton->mUIHoveringSize;
 		}
 
-		if (_pTexture2D->m_rgba != _pButton->mHoveredRGBA) // 색상이 현재와 같지 않다면 업데이트 해준다.
+		if (_pTexture2D->mRgba != _pButton->mHoveredRGBA) // 색상이 현재와 같지 않다면 업데이트 해준다.
 		{
-			_pTexture2D->m_rgba = _pButton->mHoveredRGBA;
+			_pTexture2D->mRgba = _pButton->mHoveredRGBA;
 		}
 
-		if (_pText && _pText->m_font != "" && _pText->m_text != u8""
+		if (_pText && _pText->mFont != "" && _pText->mText != u8""
 			&& _pButton->mHoveredTextFont != "" && _pButton->mHoveredText != u8"")
 		{
 			// if문은 복사 방지임 : 폰트, 텍스트, 위치가 현재와 같지 않다면 업데이트 해준다.
-			if (_pText->m_font != _pButton->mHoveredTextFont) _pText->m_font = _pButton->mHoveredTextFont;
-			if (_pText->m_text != _pButton->mHoveredText) _pText->m_text = _pButton->mHoveredText;
-			if (_pText->m_position != _pButton->mTextHoveringPosition) _pText->m_position = _pButton->mTextHoveringPosition;
+			if (_pText->mFont != _pButton->mHoveredTextFont) _pText->mFont = _pButton->mHoveredTextFont;
+			if (_pText->mText != _pButton->mHoveredText) _pText->mText = _pButton->mHoveredText;
+			if (_pText->mPosition != _pButton->mTextHoveringPosition) _pText->mPosition = _pButton->mTextHoveringPosition;
 		}
 		break;
 	case ButtonState::PRESSED:
@@ -742,7 +737,7 @@ void UIManager::UpdateButton(Texture2D* _pTexture2D, Button* _pButton, Text* _pT
 		if (_pButton->mPressedUIName != "") // 프레스 상태의 텍스처가 없다면 하지 않는다.
 		{
 			// if문은 복사 방지임 : file과 위치가 현재와 같지 않다면 업데이트 해준다.
-			if (_pTexture2D->m_file != _pButton->mPressedUIName) _pTexture2D->m_file = _pButton->mPressedUIName;
+			if (_pTexture2D->mFile != _pButton->mPressedUIName) _pTexture2D->mFile = _pButton->mPressedUIName;
 		}
 
 		// 색만 바뀌어도 움직여야 하기 때문에 텍스처가 없어도 되어야 한다.
@@ -753,20 +748,20 @@ void UIManager::UpdateButton(Texture2D* _pTexture2D, Button* _pButton, Text* _pT
 			_pButton->mUIPosition += deltaPos;
 			deltaPos = Vector2();
 		}
-		if (_pTexture2D->m_position != _pButton->mUIPressedPosition) _pTexture2D->m_position = _pButton->mUIPressedPosition;
-		if (_pTexture2D->m_size != _pButton->mUIPressedSize) _pTexture2D->m_size = _pButton->mUIPressedSize;
+		if (_pTexture2D->mPosition != _pButton->mUIPressedPosition) _pTexture2D->mPosition = _pButton->mUIPressedPosition;
+		if (_pTexture2D->mSize != _pButton->mUIPressedSize) _pTexture2D->mSize = _pButton->mUIPressedSize;
 
-		if (_pTexture2D->m_rgba != _pButton->mPressedRGBA) // 색상이 현재와 같지 않다면 업데이트 해준다.
+		if (_pTexture2D->mRgba != _pButton->mPressedRGBA) // 색상이 현재와 같지 않다면 업데이트 해준다.
 		{
-			_pTexture2D->m_rgba = _pButton->mPressedRGBA;
+			_pTexture2D->mRgba = _pButton->mPressedRGBA;
 		}
 
-		if (_pText && _pText->m_font != "" && _pText->m_text != u8""
+		if (_pText && _pText->mFont != "" && _pText->mText != u8""
 			&& _pButton->mPressedTextFont != "" && _pButton->mPressedText != u8"")
 		{
 			// if문은 복사 방지임 : 폰트, 텍스트, 위치가 현재와 같지 않다면 업데이트 해준다.
-			if (_pText->m_font != _pButton->mPressedTextFont) _pText->m_font = _pButton->mPressedTextFont;
-			if (_pText->m_text != _pButton->mPressedText) _pText->m_text = _pButton->mPressedText;
+			if (_pText->mFont != _pButton->mPressedTextFont) _pText->mFont = _pButton->mPressedTextFont;
+			if (_pText->mText != _pButton->mPressedText) _pText->mText = _pButton->mPressedText;
 			// 드래그 상태일 때는 델타 포스를 더해준 후 리셋해야 다음 프레임의 델타 포스에 영향을 미치지 않는다.
 			if (_pButton->mCanDrag && _pButton->mIsDrag)
 			{
@@ -774,7 +769,7 @@ void UIManager::UpdateButton(Texture2D* _pTexture2D, Button* _pButton, Text* _pT
 				_pButton->mTextPosition += deltaPos;
 				deltaPos = Vector2();
 			}
-			if (_pText->m_position != _pButton->mTextPressedPosition) _pText->m_position = _pButton->mTextPressedPosition;
+			if (_pText->mPosition != _pButton->mTextPressedPosition) _pText->mPosition = _pButton->mTextPressedPosition;
 		}
 		break;
 	}
@@ -871,9 +866,9 @@ void UIManager::RenderUI(int _layerOrder)
 		auto& texture = mRegistry.get<Texture2D>(entity);
 		// 컴포넌트의 레이어 값이 현재의 i 값과 일치하고, 그릴 리소스인지 확인하고 그린다.
 
-		if (texture.m_layer == _layerOrder && texture.m_isVisible == true)
+		if (texture.mLayer == _layerOrder && texture.mIsVisible == true)
 		{
-			mpGraphicsEngine->UIDrawImage(texture.m_position, texture.m_size, texture.m_file, texture.m_rgba);
+			mpGraphicsEngine->UIDrawImage(texture.mPosition, texture.mSize, texture.mFile, texture.mRgba);
 		}
 	}
 
@@ -946,29 +941,29 @@ void UIManager::RenderText(int _layerOrder)
 	{
 		auto& text = mRegistry.get<Text>(entity);
 		// 새로운 폰트를 사용할 것임을 선언
-		mpGraphicsEngine->UIStartFontID(text.m_font);
+		mpGraphicsEngine->UIStartFontID(text.mFont);
 		// 폰트 크기 재설정
-		ImGui::SetWindowFontScale(text.m_scale);
-		if (text.m_layer == _layerOrder && text.m_isVisible == true)
+		ImGui::SetWindowFontScale(text.mScale);
+		if (text.mLayer == _layerOrder && text.mIsVisible == true)
 		{
-			if (text.m_hasDepth == false) // 3D가 아님
+			if (text.mHasDepth == false) // 3D가 아님
 			{
-				switch (text.m_idx)
+				switch (text.mIdx)
 				{
 				case TEXT_IDX::NONE:
-					mpGraphicsEngine->UIDrawText(text.m_position, text.m_text, text.m_rgba);
+					mpGraphicsEngine->UIDrawText(text.mPosition, text.mText, text.mRgba);
 					break;
 				case TEXT_IDX::INT1:
-					mpGraphicsEngine->UIDrawTextWithNum(text.m_position, text.m_text, text.m_rgba, text.m_num1);
+					mpGraphicsEngine->UIDrawTextWithNum(text.mPosition, text.mText, text.mRgba, text.mNum1);
 					break;
 				case TEXT_IDX::INT2:
-					mpGraphicsEngine->UIDrawTextWithNum(text.m_position, text.m_text, text.m_rgba, text.m_num1, text.m_num2);
+					mpGraphicsEngine->UIDrawTextWithNum(text.mPosition, text.mText, text.mRgba, text.mNum1, text.mNum2);
 					break;
 				case TEXT_IDX::FLOAT1:
-					mpGraphicsEngine->UIDrawTextWithNum(text.m_position, text.m_text, text.m_rgba, text.m_num3);
+					mpGraphicsEngine->UIDrawTextWithNum(text.mPosition, text.mText, text.mRgba, text.mNum3);
 					break;
 				case TEXT_IDX::FLOAT2:
-					mpGraphicsEngine->UIDrawTextWithNum(text.m_position, text.m_text, text.m_rgba, text.m_num3, text.m_num4);
+					mpGraphicsEngine->UIDrawTextWithNum(text.mPosition, text.mText, text.mRgba, text.mNum3, text.mNum4);
 					break;
 				default:
 					break;
@@ -976,23 +971,23 @@ void UIManager::RenderText(int _layerOrder)
 			}
 			else // 3D임
 			{
-				Vector2 renderPosition = ConvertNDCtoScreeen(ConvertWorldtoNDC(text.m_worldPosition + text.m_offset, mViewMatrix, mProjMatrix));
-				switch (text.m_idx)
+				Vector2 renderPosition = ConvertNDCtoScreeen(ConvertWorldtoNDC(text.mWorldPosition + text.mOffset, mViewMatrix, mProjMatrix));
+				switch (text.mIdx)
 				{
 				case TEXT_IDX::NONE:
-					mpGraphicsEngine->UIDrawText(renderPosition, text.m_text, text.m_rgba);
+					mpGraphicsEngine->UIDrawText(renderPosition, text.mText, text.mRgba);
 					break;
 				case TEXT_IDX::INT1:
-					mpGraphicsEngine->UIDrawTextWithNum(renderPosition, text.m_text, text.m_rgba, text.m_num1);
+					mpGraphicsEngine->UIDrawTextWithNum(renderPosition, text.mText, text.mRgba, text.mNum1);
 					break;
 				case TEXT_IDX::INT2:
-					mpGraphicsEngine->UIDrawTextWithNum(renderPosition, text.m_text, text.m_rgba, text.m_num1, text.m_num2);
+					mpGraphicsEngine->UIDrawTextWithNum(renderPosition, text.mText, text.mRgba, text.mNum1, text.mNum2);
 					break;
 				case TEXT_IDX::FLOAT1:
-					mpGraphicsEngine->UIDrawTextWithNum(renderPosition, text.m_text, text.m_rgba, text.m_num3);
+					mpGraphicsEngine->UIDrawTextWithNum(renderPosition, text.mText, text.mRgba, text.mNum3);
 					break;
 				case TEXT_IDX::FLOAT2:
-					mpGraphicsEngine->UIDrawTextWithNum(renderPosition, text.m_text, text.m_rgba, text.m_num3, text.m_num4);
+					mpGraphicsEngine->UIDrawTextWithNum(renderPosition, text.mText, text.mRgba, text.mNum3, text.mNum4);
 					break;
 				default:
 					break;
@@ -1045,7 +1040,7 @@ void UIManager::RenderHealthBar(int _layerOrder)
 			if (healthBar.mHasDepth == true)
 			{
 				auto& playerTransform = mRegistry.get<Transform>(entity);
-				renderPosition = -(healthBar.mSize / 2) + ConvertNDCtoScreeen(ConvertWorldtoNDC(playerTransform.m_localPosition + healthBar.mOffSet, mViewMatrix, mProjMatrix));
+				renderPosition = -(healthBar.mSize / 2) + ConvertNDCtoScreeen(ConvertWorldtoNDC(playerTransform.mLocalPosition + healthBar.mOffSet, mViewMatrix, mProjMatrix));
 			}
 			// 배경 그리기
 			mpGraphicsEngine->UIDrawRectFilled(renderPosition, healthBar.mSize, healthBar.mBackgroundColor);
@@ -1147,7 +1142,7 @@ void UIManager::UpdateMessageBox(int _layerOrder)
 
 void UIManager::RenderDebugInfo()
 {
-	if (m_rendFPS)
+	if (mRendFPS)
 	{
 		std::string fps = std::format("{:.2f}", mpInfo->GetFPS());
 		std::u8string u8fps = std::u8string(fps.begin(), fps.end());
@@ -1157,7 +1152,7 @@ void UIManager::RenderDebugInfo()
 		mpGraphicsEngine->UIDrawText(Vector2(0, 20), u8dT);
 
 	}
-	if (m_rendCameraInfo)
+	if (mRendCameraInfo)
 	{
 		auto view = mRegistry.view<CameraComponent>();
 		std::string camPos{};
@@ -1167,26 +1162,26 @@ void UIManager::RenderDebugInfo()
 		for (auto& entity : view)
 		{
 			auto& cameraComp = mRegistry.get<CameraComponent>(entity);
-			if (cameraComp.m_cameraEnum == 0)
+			if (cameraComp.mCameraEnum == 0)
 			{
-				std::string camPosX = std::format("{:.2f}", cameraComp.m_pCamera->mViewPos.x);
-				std::string camPosY = std::format("{:.2f}", cameraComp.m_pCamera->mViewPos.y);
-				std::string camPosZ = std::format("{:.2f}", cameraComp.m_pCamera->mViewPos.z);
-				std::string camDirX = std::format("{:.2f}", cameraComp.m_pCamera->mViewDir.x);
-				std::string camDirY = std::format("{:.2f}", cameraComp.m_pCamera->mViewDir.y);
-				std::string camDirZ = std::format("{:.2f}", cameraComp.m_pCamera->mViewDir.z);
+				std::string camPosX = std::format("{:.2f}", cameraComp.mpCamera->mViewPos.x);
+				std::string camPosY = std::format("{:.2f}", cameraComp.mpCamera->mViewPos.y);
+				std::string camPosZ = std::format("{:.2f}", cameraComp.mpCamera->mViewPos.z);
+				std::string camDirX = std::format("{:.2f}", cameraComp.mpCamera->mViewDir.x);
+				std::string camDirY = std::format("{:.2f}", cameraComp.mpCamera->mViewDir.y);
+				std::string camDirZ = std::format("{:.2f}", cameraComp.mpCamera->mViewDir.z);
 				camPos = "WCameraPos: " + camPosX + "/" + camPosY + "/" + camPosZ;
 				camDir = "WCameraDir: " + camDirX + "/" + camDirY + "/" + camDirZ;
 			}
 
-			if (cameraComp.m_cameraEnum == static_cast<int>(cameraEnum::LightCamera))
+			if (cameraComp.mCameraEnum == static_cast<int>(cameraEnum::LightCamera))
 			{
-				std::string lightCamPosX = std::format("{:.2f}", cameraComp.m_pCamera->mViewPos.x);
-				std::string lightCamPosY = std::format("{:.2f}", cameraComp.m_pCamera->mViewPos.y);
-				std::string lightCamPosZ = std::format("{:.2f}", cameraComp.m_pCamera->mViewPos.z);
-				std::string lightCamDirX = std::format("{:.2f}", cameraComp.m_pCamera->mViewDir.x);
-				std::string lightCamDirY = std::format("{:.2f}", cameraComp.m_pCamera->mViewDir.y);
-				std::string lightCamDirZ = std::format("{:.2f}", cameraComp.m_pCamera->mViewDir.z);
+				std::string lightCamPosX = std::format("{:.2f}", cameraComp.mpCamera->mViewPos.x);
+				std::string lightCamPosY = std::format("{:.2f}", cameraComp.mpCamera->mViewPos.y);
+				std::string lightCamPosZ = std::format("{:.2f}", cameraComp.mpCamera->mViewPos.z);
+				std::string lightCamDirX = std::format("{:.2f}", cameraComp.mpCamera->mViewDir.x);
+				std::string lightCamDirY = std::format("{:.2f}", cameraComp.mpCamera->mViewDir.y);
+				std::string lightCamDirZ = std::format("{:.2f}", cameraComp.mpCamera->mViewDir.z);
 				lightCamPos = "LCameraPos: " + lightCamPosX + "/" + lightCamPosY + "/" + lightCamPosZ;
 				lightCamDir = "LCameraDir: " + lightCamDirX + "/" + lightCamDirY + "/" + lightCamDirZ;
 			}

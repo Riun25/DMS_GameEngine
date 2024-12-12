@@ -33,15 +33,15 @@ public:
 	void OnCharacterMove(const Event& _event);
 
 private:
-	std::shared_ptr<Entity> entity1;
-	std::shared_ptr<Entity> player1;
-	std::shared_ptr<Entity> player1_2;
-	std::shared_ptr<Entity> entity1_1;
-	std::shared_ptr<Entity> entity1_2;
-	std::shared_ptr<Entity> entity2;
-	std::shared_ptr<Entity> entity3;
-	std::shared_ptr<Entity> cameraEntity;
+	std::shared_ptr<Entity> mpEntity1;
+	std::shared_ptr<Entity> mpPlayer1;
+	std::shared_ptr<Entity> mpPlayer1_2;
+	std::shared_ptr<Entity> mpEntity1_1;
+	std::shared_ptr<Entity> mpEntity1_2;
+	std::shared_ptr<Entity> mpEntity2;
+	std::shared_ptr<Entity> mpEntity3;
+	std::shared_ptr<Entity> mpCameraEntity;
 
 	// 자동적으로 변환되게 하려고 박아논 변수다. 그냥 테스트용임
-	float testTimer = 0.0f;
+	float mTestTimer = 0.0f;
 };

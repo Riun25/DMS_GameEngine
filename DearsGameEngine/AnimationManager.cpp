@@ -1,7 +1,7 @@
 #include "AnimationManager.h"
 
 AnimationManager::AnimationManager(entt::registry& _registry, std::shared_ptr<DearsGraphicsEngine> _graphicsEngine)
-	: m_registry(_registry), mpGraphicsEngine(_graphicsEngine)
+	: mRegistry(_registry), mpGraphicsEngine(_graphicsEngine)
 {
 }
 
@@ -12,7 +12,7 @@ AnimationManager::~AnimationManager()
 void AnimationManager::AnimationUpdate(std::shared_ptr<Entity> _entity, float _dTime)
 {
 	//엔티티의 모델버퍼를 불러온다.
-	auto& modelBuffer = _entity->GetComponent<MeshRenderer>().m_pModel;
+	auto& modelBuffer = _entity->GetComponent<MeshRenderer>().mpModel;
 	//엔티티의 animationComponent를 불러온다.
 	if (_entity->HasComponent<AnimationComponent>())
 	{
@@ -105,7 +105,7 @@ void AnimationManager::AnimationUpdate(std::shared_ptr<Entity> _entity, float _d
 
 void AnimationManager::SetInitialAnimation(std::shared_ptr<Entity> _entity)
 {
-	auto& modelBuffer = _entity->GetComponent<MeshRenderer>().m_pModel;
+	auto& modelBuffer = _entity->GetComponent<MeshRenderer>().mpModel;
 	auto& animationComp = _entity->GetComponent<AnimationComponent>();
 	if (animationComp.mpTargetAnimation)
 	{

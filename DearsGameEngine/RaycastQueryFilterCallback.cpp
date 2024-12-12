@@ -1,7 +1,7 @@
 #include "RaycastQueryFilterCallback.h"
 
 RaycastQueryFilterCallback::RaycastQueryFilterCallback(const std::string& targetName)
-	: m_targetName(targetName)
+	: mTargetName(targetName)
 {
 }
 
@@ -9,7 +9,7 @@ physx::PxQueryHitType::Enum RaycastQueryFilterCallback::preFilter(const physx::P
 	, const physx::PxShape* shape, const physx::PxRigidActor* actor, physx::PxHitFlags& queryFlags)
 {
 	const char* actorName = actor->getName();
-	if (actorName && m_targetName == actorName)
+	if (actorName && mTargetName == actorName)
 	{
 		// 이름이 일치하면 계속 충돌을 보고
 		return physx::PxQueryHitType::eBLOCK;
